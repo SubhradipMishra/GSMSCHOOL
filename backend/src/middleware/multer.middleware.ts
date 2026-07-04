@@ -25,10 +25,38 @@ const fileFilter = (req: any, file: any, cb: any) => {
     }
 };
 
+const docFileFilter = (req: any, file: any, cb: any) => {
+    const allowedTypes = [
+        "image/jpeg",
+        "image/png",
+        "image/gif",
+        "application/pdf",
+        "application/msword",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "application/vnd.ms-excel",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "text/plain",
+        "application/zip"
+    ];
+    if (allowedTypes.includes(file.mimetype)) {
+        cb(null, true);
+    } else {
+        cb(new Error("Invalid file type! Supported formats: JPEG, PNG, GIF, PDF, DOC, DOCX, XLS, XLSX, TXT, ZIP."), false);
+    }
+};
+
 export const upload = multer({
     storage: storage,
     fileFilter: fileFilter,
     limits: {
         fileSize: 10 * 1024 * 1024,
+    },
+});
+
+export const uploadWithDocs = multer({
+    storage: storage,
+    fileFilter: docFileFilter,
+    limits: {
+        fileSize: 20 * 1024 * 1024, // 20 MB
     },
 });

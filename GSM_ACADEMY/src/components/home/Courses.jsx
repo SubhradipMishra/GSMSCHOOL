@@ -1,7 +1,9 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useContext } from 'react'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { RiArrowRightLine, RiArrowLeftLine, RiTimeLine, RiGroupLine, RiStarLine, RiBookOpenLine } from 'react-icons/ri'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
+import Context from '../../util/Context'
 
 const API_BASE = 'http://localhost:7070'
 const ITEMS_PER_PAGE = 8
@@ -17,9 +19,25 @@ const Courses = () => {
   const [categories, setCategories] = useState([])
   const [loading, setLoading] = useState(true)
   const [currentPage, setCurrentPage] = useState(1)
+  const [enrolledIds, setEnrolledIds] = useState([])
 
+  const { session } = useContext(Context)
+  const navigate = useNavigate()
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-80px' })
+
+  const fetchEnrollments = async () => {
+    if (!session) return
+    try {
+      const res = await axios.get(`${API_BASE}/course-enrollment/my-courses`, { withCredentials: true })
+      if (res.data.success) {
+        const ids = res.data.enrollments.map(e => e.courseId?._id || e.courseId)
+        setEnrolledIds(ids)
+      }
+    } catch (err) {
+      console.error('Failed to fetch enrollments:', err)
+    }
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -39,6 +57,32 @@ const Courses = () => {
     }
     fetchData()
   }, [])
+
+  useEffect(() => {
+    fetchEnrollments()
+  }, [session])
+
+  const handleBuyClick = async (course) => {
+    if (!session) {
+      navigate('/login')
+      return
+    }
+    const finalPrice = Math.max(0, (course.price || 0) - (course.discount || 0))
+    if (finalPrice === 0) {
+      try {
+        const res = await axios.post(`${API_BASE}/course-enrollment/enroll-free`, { courseId: course._id }, { withCredentials: true })
+        if (res.data.success) {
+          alert('Enrolled in free course successfully!')
+          fetchEnrollments()
+        }
+      } catch (err) {
+        console.error(err)
+        alert('Failed to enroll in free course')
+      }
+    } else {
+      navigate(`/courses/${course._id}/checkout`)
+    }
+  }
 
   // Filter by category
   const filtered = activeCategory === 'All'
@@ -124,58 +168,121 @@ const Courses = () => {
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.3 }}
               style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(260px,1fr))', gap: 24, marginBottom: 40 }}>
-              {paginated.map((course, i) => (
-                <motion.div key={course._id} custom={i}
-                  initial="hidden" animate="visible" variants={fadeUp}
-                  className="glass-card card-hover hover-lift"
-                  style={{ borderRadius: 20, overflow: 'hidden', cursor: 'pointer' }}
-                  whileHover={{ scale: 1.03 }}>
+              {paginated.map((course, i) => {
+                const finalPrice = Math.max(0, (course.price || 0) - (course.discount || 0));
+                const isEnrolled = enrolledIds.includes(course._id);
+                
+                return (
+                  <motion.div key={course._id} custom={i}
+                    initial="hidden" animate="visible" variants={fadeUp}
+                    className="glass-card card-hover hover-lift"
+                    style={{ borderRadius: 20, overflow: 'hidden', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
+                    whileHover={{ scale: 1.03 }}
+                    onClick={() => navigate(`/courses/${course._id}`)}>
 
-                  {/* Card Top — Thumbnail or Placeholder */}
-                  <div style={{ position: 'relative', height: 168, overflow: 'hidden', background: 'linear-gradient(135deg,var(--deep-green),var(--deep-green-light))' }}>
-                    {course.thumbnail ? (
-                      <img
-                        src={`${API_BASE}${course.thumbnail}`}
-                        alt={course.title}
-                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                      />
-                    ) : (
-                      <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <div style={{ position: 'absolute', width: 128, height: 128, borderRadius: '50%', border: '2px solid var(--gold)', opacity: 0.12 }} />
-                        <div style={{ position: 'relative', zIndex: 2, width: 64, height: 64, borderRadius: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(201,168,76,0.15)', border: '1px solid rgba(201,168,76,0.3)' }}>
-                          <RiBookOpenLine size={28} color="var(--gold)" />
+                    <div>
+                      {/* Card Top — Thumbnail or Placeholder */}
+                      <div style={{ position: 'relative', height: 168, overflow: 'hidden', background: 'linear-gradient(135deg,var(--deep-green),var(--deep-green-light))' }}>
+                        {course.thumbnail ? (
+                          <img
+                            src={`${API_BASE}${course.thumbnail}`}
+                            alt={course.title}
+                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                          />
+                        ) : (
+                          <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <div style={{ position: 'absolute', width: 128, height: 128, borderRadius: '50%', border: '2px solid var(--gold)', opacity: 0.12 }} />
+                            <div style={{ position: 'relative', zIndex: 2, width: 64, height: 64, borderRadius: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(201,168,76,0.15)', border: '1px solid rgba(201,168,76,0.3)' }}>
+                              <RiBookOpenLine size={28} color="var(--gold)" />
+                            </div>
+                          </div>
+                        )}
+                        {course.category && (
+                          <div style={{ position: 'absolute', top: 10, right: 10, padding: '3px 10px', borderRadius: 8, fontSize: 11, fontWeight: 600, background: 'rgba(0,0,0,0.6)', color: '#c9a84c', border: '1px solid rgba(201,168,76,0.4)', backdropFilter: 'blur(8px)' }}>
+                            {course.category}
+                          </div>
+                        )}
+                        {course.tag && (
+                          <div style={{ position: 'absolute', top: 10, left: 10, padding: '3px 10px', borderRadius: 8, fontSize: 11, fontWeight: 700, background: 'var(--gold)', color: 'var(--deep-green)', boxShadow: '0 2px 10px rgba(0,0,0,0.2)' }}>
+                            {course.tag}
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Card Body */}
+                      <div style={{ padding: 18 }}>
+                        <h3 className="font-cormorant" style={{ fontWeight: 700, fontSize: 20, color: 'var(--deep-green)', marginBottom: 6 }}>{course.title}</h3>
+                        <p style={{ fontSize: 12, lineHeight: 1.6, color: 'var(--text-muted)', marginBottom: 14 }}>
+                          {course.description?.substring(0, 90)}{course.description?.length > 90 ? '...' : ''}
+                        </p>
+
+                        {/* Price & Duration */}
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '12px 0', fontSize: 13 }}>
+                          <div>
+                            {finalPrice > 0 ? (
+                              <>
+                                <span style={{ textDecoration: 'line-through', color: 'var(--text-muted)', marginRight: 6, fontSize: 11 }}>₹{course.price}</span>
+                                <span style={{ fontWeight: 700, color: 'var(--deep-green)', fontSize: 15 }}>₹{finalPrice}</span>
+                              </>
+                            ) : (
+                              <span style={{ fontWeight: 700, color: '#1a3a2a', background: 'rgba(74, 222, 128, 0.2)', padding: '2px 8px', borderRadius: 6, fontSize: 13 }}>FREE</span>
+                            )}
+                          </div>
+                          {course.duration && (
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 4, color: 'var(--text-muted)', fontSize: 11 }}>
+                              <RiTimeLine size={12} color="var(--gold)" />
+                              <span>{course.duration}</span>
+                            </div>
+                          )}
+                        </div>
+
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 12, borderTop: '1px solid rgba(201,168,76,0.15)' }}>
+                          {course.assignedTeacher && (
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                              <RiGroupLine size={12} style={{ color: 'var(--gold)' }} />
+                              <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>{course.assignedTeacher}</span>
+                            </div>
+                          )}
+                          {course.department && (
+                            <span style={{ fontSize: 11, fontWeight: 500, padding: '3px 8px', borderRadius: 999, background: 'rgba(201,168,76,0.1)', color: 'var(--gold-dark)' }}>
+                              {course.department}
+                            </span>
+                          )}
                         </div>
                       </div>
-                    )}
-                    {course.category && (
-                      <div style={{ position: 'absolute', top: 10, right: 10, padding: '3px 10px', borderRadius: 8, fontSize: 11, fontWeight: 600, background: 'rgba(0,0,0,0.6)', color: '#c9a84c', border: '1px solid rgba(201,168,76,0.4)', backdropFilter: 'blur(8px)' }}>
-                        {course.category}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Card Body */}
-                  <div style={{ padding: 18 }}>
-                    <h3 className="font-cormorant" style={{ fontWeight: 700, fontSize: 20, color: 'var(--deep-green)', marginBottom: 6 }}>{course.title}</h3>
-                    <p style={{ fontSize: 12, lineHeight: 1.6, color: 'var(--text-muted)', marginBottom: 14 }}>
-                      {course.description?.substring(0, 90)}{course.description?.length > 90 ? '...' : ''}
-                    </p>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 12, borderTop: '1px solid rgba(201,168,76,0.15)' }}>
-                      {course.assignedTeacher && (
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                          <RiGroupLine size={12} style={{ color: 'var(--gold)' }} />
-                          <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>{course.assignedTeacher}</span>
-                        </div>
-                      )}
-                      {course.department && (
-                        <span style={{ fontSize: 11, fontWeight: 500, padding: '3px 8px', borderRadius: 999, background: 'rgba(201,168,76,0.1)', color: 'var(--gold-dark)' }}>
-                          {course.department}
-                        </span>
-                      )}
                     </div>
-                  </div>
-                </motion.div>
-              ))}
+
+                    {/* Action Buttons */}
+                    <div style={{ padding: '0 18px 18px 18px', display: 'flex', gap: 8 }}>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          navigate(`/courses/${course._id}`);
+                        }}
+                        className="btn-outline"
+                        style={{ flex: 1, padding: '8px 0', borderRadius: 10, fontSize: 12, fontWeight: 600 }}
+                      >
+                        View Details
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (isEnrolled) {
+                            navigate(`/student/dashboard`);
+                          } else {
+                            handleBuyClick(course);
+                          }
+                        }}
+                        className="btn-primary"
+                        style={{ flex: 1, padding: '8px 0', borderRadius: 10, fontSize: 12, fontWeight: 700 }}
+                      >
+                        {isEnrolled ? 'Enrolled ✓' : (finalPrice > 0 ? 'Buy Now' : 'Enroll Free')}
+                      </button>
+                    </div>
+
+                  </motion.div>
+                );
+              })}
             </motion.div>
           </AnimatePresence>
         )}

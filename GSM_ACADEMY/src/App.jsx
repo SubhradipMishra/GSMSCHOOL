@@ -12,6 +12,10 @@ import AdminDashboard from './pages/AdminDashboard'
 import AdminDepartments from './pages/AdminDepartments'
 import AdminCourses from './pages/AdminCourses'
 import AdminCategories from './pages/AdminCategories'
+import CourseDetails from './pages/CourseDetails'
+import CourseCheckout from './pages/CourseCheckout'
+import CoursesPage from './pages/CoursesPage'
+import AdminEvents from './pages/AdminEvents'
 // Scroll to top button
 const ScrollToTop = () => {
   const [visible, setVisible] = React.useState(false)
@@ -79,6 +83,10 @@ function App() {
         <Route path='/admin/departments' element={<AdminDepartments />} />
         <Route path='/admin/courses' element={<AdminCourses />} />
         <Route path='/admin/categories' element={<AdminCategories />} />
+        <Route path='/admin/events' element={<AdminEvents />} />
+        <Route path='/courses' element={<CoursesPage />} />
+        <Route path='/courses/:id' element={<CourseDetails />} />
+        <Route path='/courses/:id/checkout' element={<CourseCheckout />} />
       </Routes>
     </Context.Provider>
   )

@@ -8,6 +8,10 @@ export interface ICourse {
     category?: string;
     thumbnail?: string;
     gallery?: string[];
+    price?: number;
+    tag?: string;
+    discount?: number;
+    duration?: string;
 }
 
 const CourseSchema = new Schema<ICourse>({
@@ -41,6 +45,22 @@ const CourseSchema = new Schema<ICourse>({
     gallery: {
         type: [String],
         default: []
+    },
+    price: {
+        type: Number,
+        default: 0
+    },
+    tag: {
+        type: String,
+        default: ""
+    },
+    discount: {
+        type: Number,
+        default: 0
+    },
+    duration: {
+        type: String,
+        default: ""
     }
 }, { timestamps: true });
 

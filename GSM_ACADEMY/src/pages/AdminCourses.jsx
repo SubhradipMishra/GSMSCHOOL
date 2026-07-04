@@ -20,7 +20,7 @@ const AdminCourses = () => {
     const [showModal, setShowModal] = useState(false);
     const [modalMode, setModalMode] = useState('add'); // 'add' or 'edit'
     
-    const [currentCourse, setCurrentCourse] = useState({ title: '', description: '', department: '', assignedTeacher: '', category: '' });
+    const [currentCourse, setCurrentCourse] = useState({ title: '', description: '', department: '', assignedTeacher: '', category: '', price: '', tag: '', discount: '', duration: '' });
     const [thumbnailFile, setThumbnailFile] = useState(null);
     const [galleryFiles, setGalleryFiles] = useState(null);
 
@@ -76,6 +76,10 @@ const AdminCourses = () => {
             formData.append('department', currentCourse.department);
             formData.append('assignedTeacher', currentCourse.assignedTeacher);
             formData.append('category', currentCourse.category);
+            formData.append('price', currentCourse.price || 0);
+            formData.append('tag', currentCourse.tag || '');
+            formData.append('discount', currentCourse.discount || 0);
+            formData.append('duration', currentCourse.duration || '');
 
             if (thumbnailFile) {
                 formData.append('thumbnail', thumbnailFile);
@@ -118,7 +122,7 @@ const AdminCourses = () => {
 
     const openAddModal = () => {
         setModalMode('add');
-        setCurrentCourse({ title: '', description: '', department: '', assignedTeacher: '', category: '' });
+        setCurrentCourse({ title: '', description: '', department: '', assignedTeacher: '', category: '', price: '', tag: '', discount: '', duration: '' });
         setThumbnailFile(null);
         setGalleryFiles(null);
         setShowModal(true);
@@ -261,6 +265,26 @@ const AdminCourses = () => {
                                             <option key={cat._id} value={cat.name} className="text-black">{cat.name}</option>
                                         ))}
                                     </select>
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label className="block text-sm text-gray-400 mb-1">Price (₹)</label>
+                                        <input type="number" name="price" value={currentCourse.price} onChange={handleInputChange} className="w-full bg-white/5 border border-white/10 p-3 rounded text-white focus:outline-none focus:border-gold" placeholder="0" />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm text-gray-400 mb-1">Discount Amount (₹)</label>
+                                        <input type="number" name="discount" value={currentCourse.discount} onChange={handleInputChange} className="w-full bg-white/5 border border-white/10 p-3 rounded text-white focus:outline-none focus:border-gold" placeholder="0" />
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label className="block text-sm text-gray-400 mb-1">Tag (e.g. Best Seller, New)</label>
+                                        <input type="text" name="tag" value={currentCourse.tag} onChange={handleInputChange} className="w-full bg-white/5 border border-white/10 p-3 rounded text-white focus:outline-none focus:border-gold" placeholder="e.g. Popular" />
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm text-gray-400 mb-1">Duration (e.g. 6 Weeks, 3 Months)</label>
+                                        <input type="text" name="duration" value={currentCourse.duration} onChange={handleInputChange} className="w-full bg-white/5 border border-white/10 p-3 rounded text-white focus:outline-none focus:border-gold" placeholder="e.g. 3 Months" />
+                                    </div>
                                 </div>
                                 <div className="grid grid-cols-2 gap-4">
                                     <div>

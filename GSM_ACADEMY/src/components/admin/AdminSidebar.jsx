@@ -63,6 +63,16 @@ const AdminSidebar = () => {
                     >
                         <i className="ri-price-tag-3-line mr-3 text-lg"></i> Categories
                     </NavLink>
+                    <NavLink
+                        to="/admin/events"
+                        className={({ isActive }) =>
+                            `flex items-center px-4 py-3 rounded-lg transition-all duration-300 ${
+                                isActive ? 'bg-gold text-black font-semibold shadow-[0_0_15px_rgba(212,175,55,0.4)]' : 'text-gray-400 hover:bg-white/5 hover:text-white'
+                            }`
+                        }
+                    >
+                        <i className="ri-calendar-todo-line mr-3 text-lg"></i> Events
+                    </NavLink>
                 </nav>
             </div>
             

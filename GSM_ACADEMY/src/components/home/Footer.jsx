@@ -3,14 +3,14 @@ import { motion } from 'framer-motion'
 import { RiMapPinLine, RiPhoneLine, RiMailLine, RiSendPlaneLine } from 'react-icons/ri'
 
 const quickLinks = [
-  { label: 'Home', href: '#home' },
-  { label: 'About Us', href: '#about' },
-  { label: 'Courses', href: '#courses' },
-  { label: 'Events', href: '#events' },
-  { label: 'Gallery', href: '#gallery' },
-  { label: 'Teachers', href: '#teachers' },
-  { label: 'Contact', href: '#contact' },
-  { label: 'FAQs', href: '#faqs' },
+  { label: 'Home', href: '/#home' },
+  { label: 'About Us', href: '/#about' },
+  { label: 'Courses', href: '/#courses' },
+  { label: 'Events', href: '/#events' },
+  { label: 'Gallery', href: '/#gallery' },
+  { label: 'Teachers', href: '/#teachers' },
+  { label: 'Contact', href: '/#contact' },
+  { label: 'FAQs', href: '/#faqs' },
 ]
 
 const socialLinks = [

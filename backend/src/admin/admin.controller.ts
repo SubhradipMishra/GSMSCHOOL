@@ -222,7 +222,7 @@ export const deleteDepartment = async (req: Request, res: Response): Promise<any
 // Create a new course
 export const createCourse = async (req: Request, res: Response): Promise<any> => {
     try {
-        const { title, description, department, assignedTeacher, category } = req.body;
+        const { title, description, department, assignedTeacher, category, price, tag, discount, duration } = req.body;
         
         if (!title || !department || !assignedTeacher) {
             return res.status(400).json({ success: false, message: "Title, department, and assigned teacher are required" });
@@ -246,7 +246,7 @@ export const createCourse = async (req: Request, res: Response): Promise<any> =>
             }
         }
 
-        const newCourse = await CourseModel.create({ title, description, department, assignedTeacher, category, thumbnail, gallery });
+        const newCourse = await CourseModel.create({ title, description, department, assignedTeacher, category, thumbnail, gallery, price, tag, discount, duration });
         return res.status(201).json({ success: true, message: "Course created successfully", course: newCourse });
     } catch (error: any) {
         console.error("Error creating course:", error);

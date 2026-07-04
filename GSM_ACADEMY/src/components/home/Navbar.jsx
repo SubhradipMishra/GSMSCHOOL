@@ -53,6 +53,26 @@ const Navbar = () => {
     navigate('/')
   }
 
+  const handleNavClick = (href) => {
+    setActive(href);
+    setMenuOpen(false);
+    if (href.startsWith('/#')) {
+      const targetId = href.substring(2);
+      if (window.location.pathname !== '/') {
+        navigate('/');
+        setTimeout(() => {
+          const el = document.getElementById(targetId);
+          if (el) el.scrollIntoView({ behavior: 'smooth' });
+        }, 300);
+      } else {
+        const el = document.getElementById(targetId);
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      navigate(href);
+    }
+  };
+
   return (
     <motion.header
       className={`nav-fixed ${scrolled ? 'nav-scrolled' : ''}`}
@@ -102,13 +122,13 @@ const Navbar = () => {
           {/* Desktop links */}
           <div className="nav-links" style={{ display:'flex', gap:4 }}>
             {navLinks.map(link => (
-              <a
-                key={link.label} href={link.href}
-                onClick={() => setActive(link.href)}
+              <button
+                key={link.label}
+                onClick={() => handleNavClick(link.href)}
                 style={{
                   position:'relative', padding:'8px 12px', fontSize:14, fontWeight:500,
                   color: active === link.href ? 'var(--gold)' : 'rgba(255,255,255,0.85)',
-                  textDecoration:'none', transition:'color 0.2s'
+                  background: 'none', border: 'none', cursor: 'pointer', transition:'color 0.2s'
                 }}
               >
                 {link.label}
@@ -116,7 +136,7 @@ const Navbar = () => {
                   <motion.span layoutId="ul"
                     style={{ position:'absolute', bottom:0, left:8, right:8, height:2, borderRadius:1, background:'var(--gold)' }} />
                 )}
-              </a>
+              </button>
             ))}
           </div>
 
@@ -183,12 +203,13 @@ const Navbar = () => {
             >
               <div style={{ padding:'16px 24px', display:'flex', flexDirection:'column', gap:4 }}>
                 {navLinks.map((link, i) => (
-                  <a key={link.label} href={link.href}
-                    onClick={() => { setActive(link.href); setMenuOpen(false) }}
+                  <button key={link.label}
+                    onClick={() => handleNavClick(link.href)}
                     style={{ padding:'12px 0', fontSize:14, fontWeight:500, color:'rgba(255,255,255,0.85)',
-                      textDecoration:'none', borderBottom:'1px solid var(--border-gold)' }}>
+                      background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left',
+                      width: '100%', borderBottom:'1px solid var(--border-gold)' }}>
                     {link.label}
-                  </a>
+                  </button>
                 ))}
                 
                 <div style={{ display:'flex', gap:12, paddingTop:16 }}>
