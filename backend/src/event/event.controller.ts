@@ -4,6 +4,7 @@ import EventBookingModel from "./event-booking.model";
 import EnrollmentModel from "../enrollment/enrollment.model";
 import { sendEventBookingSuccessEmail } from "../utils/mail";
 import Razorpay from "razorpay";
+import { awardXP } from "../xp/xp.controller";
 
 const getRazorpayInstance = () => {
     return new Razorpay({
@@ -218,6 +219,16 @@ export const bookEventFree = async (req: any, res: Response): Promise<any> => {
             });
         } catch (mailErr) {
             console.error("Failed to send free event email:", mailErr);
+        }
+
+        // Award XP for event booking
+        try {
+            const student = await EnrollmentModel.findOne({ email: studentEmail });
+            if (student) {
+                await awardXP(student._id.toString(), "EVENT_BOOKING", `Booked free event: ${event.title}`);
+            }
+        } catch (xpErr) {
+            console.error("Failed to award XP for event:", xpErr);
         }
 
         return res.status(201).json({ success: true, message: "Seat booked successfully!", booking });

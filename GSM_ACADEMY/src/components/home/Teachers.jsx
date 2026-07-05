@@ -1,103 +1,249 @@
 import React, { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
-import { RiInstagramLine, RiYoutubeLine } from 'react-icons/ri'
+import { RiInstagramLine, RiYoutubeLine, RiCompassDiscoverLine } from 'react-icons/ri'
 
 const teachers = [
-  { id:1, name:'Guru Radhika Nair', role:'Bharatanatyam', exp:'25+ Yrs', initials:'RN', color:'#c9a84c', bg:'linear-gradient(135deg,#1a3a2a,#2d5940)', award:'National Award Winner', students:'500+', icon:'ri-dance-line' },
-  { id:2, name:'Pt. Suresh Kumar', role:'Tabla & Percussion', exp:'30+ Yrs', initials:'SK', color:'#e8c96d', bg:'linear-gradient(135deg,#2d2010,#5a3d1a)', award:'Sangeet Natak Akademi', students:'700+', icon:'ri-rhythm-line' },
-  { id:3, name:'Smt. Priya Menon', role:'Kathak & Classical Dance', exp:'20+ Yrs', initials:'PM', color:'#d4a8c9', bg:'linear-gradient(135deg,#3a1a2a,#60304a)', award:'State Kalakara Award', students:'400+', icon:'ri-body-scan-line' },
-  { id:4, name:'Dr. Anand Verma', role:'Sanskrit & Vedic Arts', exp:'22+ Yrs', initials:'AV', color:'#a8a8d4', bg:'linear-gradient(135deg,#1a1a3a,#2a2a60)', award:'PhD Sanskrit, BHU', students:'350+', icon:'ri-book-2-line' },
+  { 
+    id: 1, 
+    name: 'Guru Radhika Nair', 
+    role: 'Bharatanatyam Guru', 
+    exp: 'Level 25 (25+ Yrs)', 
+    initials: 'RN', 
+    color: '#FF6F3C', 
+    bg: 'linear-gradient(135deg, #1D2A44, #2E4057)', 
+    award: 'National Award Winner', 
+    students: '500+ Apprentices', 
+    icon: '💃',
+    skills: { Grace: 95, Rhythm: 90, Wisdom: 92 }
+  },
+  { 
+    id: 2, 
+    name: 'Pt. Suresh Kumar', 
+    role: 'Tabla Maestro', 
+    exp: 'Level 30 (30+ Yrs)', 
+    initials: 'SK', 
+    color: '#F5B041', 
+    bg: 'linear-gradient(135deg, #2D1E10, #4A321A)', 
+    award: 'Sangeet Natak Akademi', 
+    students: '700+ Apprentices', 
+    icon: '🥁',
+    skills: { Grace: 70, Rhythm: 98, Wisdom: 95 }
+  },
+  { 
+    id: 3, 
+    name: 'Smt. Priya Menon', 
+    role: 'Kathak Mentor', 
+    exp: 'Level 20 (20+ Yrs)', 
+    initials: 'PM', 
+    color: '#E74C3C', 
+    bg: 'linear-gradient(135deg, #3A1A2A, #5A2A42)', 
+    award: 'State Kalakara Award', 
+    students: '400+ Apprentices', 
+    icon: '✨',
+    skills: { Grace: 92, Rhythm: 88, Wisdom: 90 }
+  },
+  { 
+    id: 4, 
+    name: 'Dr. Anand Verma', 
+    role: 'Sanskrit Scholar', 
+    exp: 'Level 22 (22+ Yrs)', 
+    initials: 'AV', 
+    color: '#3498DB', 
+    bg: 'linear-gradient(135deg, #1A1A3A, #2C2C60)', 
+    award: 'PhD Sanskrit, BHU', 
+    students: '350+ Apprentices', 
+    icon: '📜',
+    skills: { Grace: 65, Rhythm: 70, Wisdom: 99 }
+  },
 ]
 
 const Teachers = () => {
   const ref = useRef(null)
-  const inView = useInView(ref, { once:true, margin:'-80px' })
+  const inView = useInView(ref, { once: true, margin: '-80px' })
 
   return (
-    <section id="teachers" ref={ref}
-      style={{ padding:'96px 0', position:'relative', overflow:'hidden', background:'linear-gradient(180deg,#f0e8d0,var(--cream))' }}>
-      <div className="pattern-bg" style={{ position:'absolute', inset:0, opacity:0.3, pointerEvents:'none' }} />
+    <>
+      {/* Level 6 Connector */}
+      <div className="level-connector">
+        <div className="level-flag">LEVEL 6: THE MASTERS GUILD</div>
+      </div>
 
-      <div className="container" style={{ position:'relative', zIndex:1 }}>
-        {/* Header */}
-        <motion.div className="text-center" style={{ marginBottom:56 }}
-          initial={{ opacity:0, y:30 }} animate={inView ? { opacity:1, y:0 } : {}} transition={{ duration:0.6 }}>
-          <p className="ornamental-border" style={{ fontSize:11, letterSpacing:'0.12em', fontWeight:600, color:'var(--gold)', marginBottom:12 }}>LEARN FROM THE BEST</p>
-          <h2 className="font-cormorant section-heading">Meet Our Teachers</h2>
-          <div className="section-divider" style={{ margin:'12px auto 20px' }} />
-          <p className="section-sub" style={{ margin:'0 auto' }}>
-            Award-winning artists and nationally recognized maestros who bring decades of mastery to every class.
-          </p>
-        </motion.div>
+      <section id="teachers" ref={ref} style={{ padding: '96px 0', position: 'relative', overflow: 'hidden', background: '#FDF6E3' }}>
+        {/* Pixel patterns */}
+        <div className="pattern-bg" style={{ position: 'absolute', inset: 0, opacity: 0.15, pointerEvents: 'none' }} />
 
-        {/* Cards */}
-        <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:24 }}>
-          {teachers.map((t, i) => (
-            <motion.div key={t.id}
-              initial={{ opacity:0, y:40 }} animate={inView ? { opacity:1, y:0 } : {}} transition={{ delay:i*0.12, duration:0.6 }}
-              className="glass-card card-hover hover-lift"
-              style={{ borderRadius:20, overflow:'hidden' }}
-              whileHover={{ scale:1.03 }}>
+        <div className="container" style={{ position: 'relative', zIndex: 1 }}>
+          {/* Header */}
+          <div style={{ textAlign: 'center', marginBottom: 56 }}>
+            <p className="font-pixel" style={{ fontSize: '9px', color: '#FF6F3C', margin: '0 0 12px 0' }}>GUILD MASTERS</p>
+            <h2 className="font-arcade" style={{ fontSize: '32px', color: '#1D2A44', margin: '0 0 16px 0' }}>MEET OUR HERO CLASS</h2>
+            <p style={{ color: '#5D6D7E', fontSize: '15px', maxWidth: 620, margin: '0 auto', lineHeight: 1.6 }}>
+              Unlock the profiles of our award-winning gurus and masters. Unlock hidden potential by learning directly from legends.
+            </p>
+          </div>
 
-              {/* Avatar */}
-              <div style={{ position:'relative', height:220, display:'flex', alignItems:'center', justifyContent:'center', overflow:'hidden', background:t.bg }}>
-                <div style={{ position:'absolute', width:160, height:160, borderRadius:'50%', border:'2px solid white', opacity:0.1 }} />
-                <div style={{ position:'absolute', width:112, height:112, borderRadius:'50%', border:'1px solid white', opacity:0.15, transform:'rotate(45deg)' }} />
-                <motion.div style={{ position:'relative', zIndex:2, width:96, height:96, borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center',
-                  background:`rgba(255,255,255,0.08)`, border:`2px solid ${t.color}55` }}
-                  animate={{ rotate:[0,5,-5,0] }} transition={{ duration:6, repeat:Infinity, ease:'easeInOut', delay:i*0.5 }}>
-                  <span className="font-cormorant" style={{ fontWeight:700, fontSize:32, color:t.color }}>{t.initials}</span>
-                </motion.div>
-                <div style={{ position:'absolute', top:14, right:14, width:36, height:36, borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center',
-                  background:'rgba(255,255,255,0.1)', border:'1px solid rgba(255,255,255,0.2)' }}>
-                  <i className={t.icon} style={{ fontSize:16, color:t.color }} />
-                </div>
-                <div style={{ position:'absolute', bottom:14, left:14, padding:'4px 10px', borderRadius:8, fontSize:11, fontWeight:700,
-                  background:'rgba(0,0,0,0.3)', color:t.color, backdropFilter:'blur(8px)', border:`1px solid ${t.color}44` }}>
-                  {t.exp} Experience
-                </div>
-              </div>
+          {/* Character Grid */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 24 }}>
+            {teachers.map((t, i) => (
+              <motion.div 
+                key={t.id}
+                initial={{ opacity: 0, y: 30 }} 
+                animate={inView ? { opacity: 1, y: 0 } : {}} 
+                transition={{ delay: i * 0.1, duration: 0.5 }}
+                className="arcade-card"
+                style={{ borderRadius: 20, overflow: 'hidden', background: '#FDF6E3' }}
+                whileHover={{ scale: 1.03, translateY: -2 }}
+              >
+                {/* Character Card Hero Image Frame */}
+                <div style={{ 
+                  position: 'relative', 
+                  height: 200, 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center', 
+                  background: t.bg,
+                  borderBottom: '3px solid #1D2A44'
+                }} className="crt-screen">
+                  {/* Neon retro grids inside character image block */}
+                  <div style={{ position: 'absolute', width: 140, height: 140, borderRadius: '50%', border: '2px dashed rgba(253, 246, 227, 0.15)' }} />
+                  
+                  {/* Initials Sprite */}
+                  <motion.div 
+                    style={{ 
+                      position: 'relative', 
+                      zIndex: 2, 
+                      width: 90, 
+                      height: 90, 
+                      borderRadius: '12px', 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      justifyContent: 'center',
+                      background: 'rgba(253, 246, 227, 0.1)', 
+                      border: `3px solid ${t.color}`,
+                      boxShadow: `0 0 12px ${t.color}55`
+                    }}
+                    animate={{ y: [0, -4, 0] }}
+                    transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: i * 0.4 }}
+                  >
+                    <span className="font-arcade" style={{ fontWeight: 'bold', fontSize: '32px', color: '#FDF6E3' }}>{t.initials}</span>
+                  </motion.div>
 
-              {/* Info */}
-              <div style={{ padding:20 }}>
-                <h3 className="font-cormorant" style={{ fontWeight:700, fontSize:20, color:'var(--deep-green)', marginBottom:4 }}>{t.name}</h3>
-                <p style={{ fontSize:13, fontWeight:600, color:'var(--gold-dark)', marginBottom:8 }}>{t.role}</p>
-                <p style={{ fontSize:11, display:'inline-block', padding:'3px 8px', borderRadius:8, marginBottom:12,
-                  background:'rgba(201,168,76,0.08)', color:'var(--text-muted)', border:'1px solid rgba(201,168,76,0.15)' }}>
-                  🏆 {t.award}
-                </p>
-                <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', paddingTop:12, borderTop:'1px solid rgba(201,168,76,0.15)' }}>
-                  <div style={{ display:'flex', alignItems:'center', gap:5 }}>
-                    <i className="ri-group-line" style={{ fontSize:13, color:'var(--gold)' }} />
-                    <span style={{ fontSize:12, color:'var(--text-muted)' }}>{t.students} Students</span>
+                  {/* Character Class Icon */}
+                  <div style={{ 
+                    position: 'absolute', 
+                    top: 14, 
+                    right: 14, 
+                    width: 32, 
+                    height: 32, 
+                    borderRadius: '8px', 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    justifyContent: 'center',
+                    background: '#1D2A44', 
+                    border: `2px solid ${t.color}`,
+                    fontSize: '18px'
+                  }}>
+                    {t.icon}
                   </div>
-                  <div style={{ display:'flex', gap:8 }}>
-                    {[RiInstagramLine, RiYoutubeLine].map((Icon, j) => (
-                      <motion.a key={j} href="#"
-                        style={{ width:28, height:28, borderRadius:'50%', display:'flex', alignItems:'center', justifyContent:'center',
-                          background:'rgba(201,168,76,0.1)', color:'var(--gold)', textDecoration:'none' }}
-                        whileHover={{ scale:1.2, background:'rgba(201,168,76,0.2)' }}>
-                        <Icon size={13} />
-                      </motion.a>
+
+                  {/* Character level badge */}
+                  <div className="font-pixel" style={{ 
+                    position: 'absolute', 
+                    bottom: 12, 
+                    left: 12, 
+                    padding: '4px 8px', 
+                    borderRadius: '4px', 
+                    fontSize: '7px',
+                    background: '#1D2A44', 
+                    color: t.color, 
+                    border: `1.5px solid ${t.color}` 
+                  }}>
+                    {t.exp.toUpperCase()}
+                  </div>
+                </div>
+
+                {/* Character Attributes Sheet */}
+                <div style={{ padding: 20 }}>
+                  <h3 className="font-arcade" style={{ fontWeight: 700, fontSize: '18px', color: '#1D2A44', margin: '0 0 4px 0' }}>{t.name}</h3>
+                  <p className="font-pixel" style={{ fontSize: '8px', color: t.color, margin: '0 0 12px 0', letterSpacing: '0.5px' }}>{t.role.toUpperCase()}</p>
+                  
+                  {/* Achievement Emblem */}
+                  <div style={{ 
+                    fontSize: '11px', 
+                    padding: '6px 10px', 
+                    borderRadius: '8px', 
+                    background: 'rgba(29, 42, 68, 0.05)', 
+                    color: '#5D6D7E', 
+                    border: '2px dashed #1D2A44',
+                    marginBottom: 16,
+                    display: 'inline-block'
+                  }}>
+                    🏆 {t.award}
+                  </div>
+
+                  {/* Attribute stats progress bars */}
+                  <div style={{ spaceY: '6px', marginBottom: 16 }}>
+                    {Object.entries(t.skills).map(([skill, val]) => (
+                      <div key={skill} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+                        <span className="font-pixel" style={{ fontSize: '6px', width: '38px', color: '#1D2A44' }}>{skill}</span>
+                        <div className="pixel-progress" style={{ height: '7px', flexGrow: 1, border: '1.5px solid #1D2A44', background: 'rgba(0,0,0,0.05)' }}>
+                          <div className="pixel-progress-fill" style={{ width: `${val}%`, background: t.color, borderRight: 'none' }} />
+                        </div>
+                        <span className="font-pixel" style={{ fontSize: '6px', width: '18px', textAlign: 'right' }}>{val}</span>
+                      </div>
                     ))}
                   </div>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
 
-        {/* CTA */}
-        <motion.div className="text-center" style={{ marginTop:48 }}
-          initial={{ opacity:0 }} animate={inView ? { opacity:1 } : {}} transition={{ delay:0.6 }}>
-          <motion.button className="btn-outline"
-            style={{ display:'inline-flex', alignItems:'center', gap:8, padding:'12px 32px', borderRadius:12, fontSize:14 }}
-            whileHover={{ scale:1.04 }} whileTap={{ scale:0.97 }}>
-            <i className="ri-team-line" /> View All Teachers
-          </motion.button>
-        </motion.div>
-      </div>
-    </section>
+                  {/* Character Social / Apprentice footer */}
+                  <div style={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    justifyContent: 'space-between', 
+                    paddingTop: 12, 
+                    borderTop: '2px dashed rgba(29, 42, 68, 0.15)' 
+                  }}>
+                    <span className="font-arcade" style={{ fontSize: '11px', fontWeight: 'bold', color: '#5D6D7E' }}>
+                      👤 {t.students}
+                    </span>
+                    <div style={{ display: 'flex', gap: 6 }}>
+                      {[RiInstagramLine, RiYoutubeLine].map((Icon, j) => (
+                        <a 
+                          key={j} 
+                          href="#"
+                          className="arcade-btn"
+                          style={{ 
+                            width: 26, 
+                            height: 26, 
+                            borderRadius: '6px', 
+                            display: 'flex', 
+                            alignItems: 'center', 
+                            justifyContent: 'center',
+                            background: '#EEDDC2', 
+                            color: '#1D2A44', 
+                            textDecoration: 'none',
+                            padding: 0,
+                            boxShadow: '1.5px 1.5px 0px #1D2A44'
+                          }}
+                        >
+                          <Icon size={12} />
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Guild CTA */}
+          <div style={{ textAlign: 'center', marginTop: 48 }}>
+            <button className="arcade-btn btn-outline" style={{ borderRadius: '12px', fontSize: '13px' }}>
+              <RiCompassDiscoverLine size={16} /> VIEW ALL GUILD MASTERS [X]
+            </button>
+          </div>
+        </div>
+      </section>
+    </>
   )
 }
 

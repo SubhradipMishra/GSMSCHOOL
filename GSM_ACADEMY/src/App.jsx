@@ -33,17 +33,19 @@ const ScrollToTop = () => {
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.6 }}
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-          className="fixed bottom-8 right-8 z-50 w-12 h-12 rounded-full flex items-center justify-center shadow-lg"
+          className="fixed bottom-8 right-8 z-50 w-12 h-12 flex items-center justify-center"
           style={{
-            background: 'linear-gradient(135deg, var(--gold-dark), var(--gold))',
-            border: '1px solid rgba(255,255,255,0.2)',
+            background: 'var(--gold)',
+            border: '3px solid var(--deep-green)',
+            borderRadius: '10px',
+            boxShadow: '3px 3px 0px var(--deep-green)',
           }}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           id="scroll-to-top"
           aria-label="Scroll to top"
         >
-          <i className="ri-arrow-up-line text-xl" style={{ color: 'var(--deep-green)' }} />
+          <i className="ri-arrow-up-line text-xl" style={{ color: 'var(--deep-green)', fontWeight: 'bold' }} />
         </motion.button>
       )}
     </AnimatePresence>

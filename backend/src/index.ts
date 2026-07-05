@@ -16,6 +16,7 @@ import AdminRouter from "./admin/admin.route";
 import PaymentRouter from "./payment/payment.routes";
 import CourseEnrollmentRouter from "./course-enrollment/course-enrollment.route";
 import EventRouter from "./event/event.route";
+import XPRouter from "./xp/xp.route";
 
 
 const app = express();
@@ -34,5 +35,6 @@ app.use("/admin", AdminRouter);
 app.use("/payment", PaymentRouter);
 app.use("/course-enrollment", CourseEnrollmentRouter);
 app.use("/events", EventRouter);
+app.use("/xp", XPRouter);
 
 app.listen(process.env.PORT as string, () => console.log(`Server running on port ${process.env.PORT}`))

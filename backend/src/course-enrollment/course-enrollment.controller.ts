@@ -3,6 +3,7 @@ import CourseModel from "../admin/course.model";
 import EnrollmentModel from "../enrollment/enrollment.model";
 import { Request, Response } from "express";
 import { sendPaymentSuccessEmail } from "../utils/mail";
+import { awardXP } from "../xp/xp.controller";
 
 export const createEnrollment = async (req: Request, res: Response) => {
     try {
@@ -64,6 +65,16 @@ export const enrollFree = async (req: any, res: Response) => {
             });
         } catch (mailErr) {
             console.error("Failed to send free enrollment email:", mailErr);
+        }
+
+        // Award XP for free enrollment
+        try {
+            const student = await EnrollmentModel.findOne({ email: studentEmail });
+            if (student) {
+                await awardXP(student._id.toString(), "FREE_ENROLL", `Enrolled in free course: ${course.title}`);
+            }
+        } catch (xpErr) {
+            console.error("Failed to award XP:", xpErr);
         }
 
         return res.status(201).json({ success: true, data: enrollment });

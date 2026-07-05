@@ -1,17 +1,12 @@
 import React, { useState, useRef, useEffect, useContext } from 'react'
-import { motion, useInView, AnimatePresence } from 'framer-motion'
-import { RiArrowRightLine, RiArrowLeftLine, RiTimeLine, RiGroupLine, RiStarLine, RiBookOpenLine } from 'react-icons/ri'
+import { motion, AnimatePresence } from 'framer-motion'
+import { RiArrowRightLine, RiArrowLeftLine, RiTimeLine, RiGroupLine, RiBookOpenLine, RiFolderOpenLine } from 'react-icons/ri'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import Context from '../../util/Context'
 
 const API_BASE = 'http://localhost:7070'
 const ITEMS_PER_PAGE = 8
-
-const fadeUp = {
-  hidden: { opacity: 0, y: 40 },
-  visible: (i = 0) => ({ opacity: 1, y: 0, transition: { delay: i * 0.08, duration: 0.5, ease: 'easeOut' } })
-}
 
 const Courses = () => {
   const [activeCategory, setActiveCategory] = useState('All')
@@ -24,7 +19,6 @@ const Courses = () => {
   const { session } = useContext(Context)
   const navigate = useNavigate()
   const ref = useRef(null)
-  const inView = useInView(ref, { once: true, margin: '-80px' })
 
   const fetchEnrollments = async () => {
     if (!session) return
@@ -84,7 +78,7 @@ const Courses = () => {
     }
   }
 
-  // Filter by category
+  // Filter courses by category
   const filtered = activeCategory === 'All'
     ? courses
     : courses.filter(c => c.category === activeCategory)
@@ -98,249 +92,334 @@ const Courses = () => {
     setCurrentPage(1)
   }
 
-  const allCategories = [{ name: 'All', color: '#c9a84c' }, ...categories]
+  const allCategories = [{ name: 'All', color: '#FF6F3C' }, ...categories]
 
   return (
-    <section id="courses" ref={ref}
-      style={{ padding: '96px 0', position: 'relative', overflow: 'hidden', background: 'linear-gradient(180deg,var(--cream) 0%,#f0e8d0 100%)' }}>
-      <div style={{ position: 'absolute', bottom: 0, left: 0, width: 320, height: 320, borderRadius: '50%', background: 'radial-gradient(circle,var(--gold),transparent)', opacity: 0.04, transform: 'translate(-30%,30%)', pointerEvents: 'none' }} />
+    <>
+      {/* Level 4 Connector */}
+      <div className="level-connector">
+        <div className="level-flag">LEVEL 4: SKILL TREE EXPLORER</div>
+      </div>
 
-      <div className="container">
-        {/* Header */}
-        <motion.div className="text-center" style={{ marginBottom: 48 }}
-          initial="hidden" animate={inView ? 'visible' : 'hidden'} variants={fadeUp}>
-          <p className="ornamental-border" style={{ fontSize: 11, letterSpacing: '0.12em', fontWeight: 600, color: 'var(--gold)', marginBottom: 12 }}>WHAT WE TEACH</p>
-          <h2 className="font-cormorant section-heading">Featured Courses</h2>
-          <div className="section-divider" style={{ margin: '12px auto 20px' }} />
-          <p className="section-sub" style={{ margin: '0 auto' }}>
-            Explore our curated courses in classical arts, music, and cultural studies — crafted by masters, delivered with love.
-          </p>
-        </motion.div>
+      <section id="courses" ref={ref} style={{ padding: '96px 0', position: 'relative', overflow: 'hidden', background: 'linear-gradient(180deg, #FDF6E3 0%, #EEDDC2 100%)' }}>
+        {/* Decorative corner accent */}
+        <div style={{ position: 'absolute', top: -40, left: -40, width: 200, height: 200, borderRadius: '50%', border: '4px dashed rgba(29, 42, 68, 0.05)', pointerEvents: 'none' }} />
 
-        {/* Category Filter Pills */}
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ delay: 0.2 }}
-          style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 10, marginBottom: 48 }}>
-          {allCategories.map(cat => {
-            const isActive = activeCategory === cat.name
-            return (
-              <motion.button key={cat.name} onClick={() => handleCategoryChange(cat.name)}
-                style={{
-                  padding: '8px 20px', borderRadius: 999, fontSize: 13, fontWeight: isActive ? 700 : 500, cursor: 'pointer',
-                  background: isActive ? `linear-gradient(135deg,${cat.color}cc,${cat.color})` : 'rgba(26,58,42,0.06)',
-                  color: isActive ? '#1a3a2a' : 'var(--text-muted)',
-                  border: `1px solid ${isActive ? cat.color : 'rgba(201,168,76,0.2)'}`,
-                  transition: 'all 0.25s'
-                }}
-                whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.97 }}>
-                {cat.name}
-              </motion.button>
-            )
-          })}
-        </motion.div>
-
-        {/* Loading */}
-        {loading && (
-          <div style={{ textAlign: 'center', padding: '60px 0', color: 'var(--text-muted)' }}>
-            <div style={{ fontSize: 48, marginBottom: 16, opacity: 0.3 }}>📚</div>
-            <p>Loading courses...</p>
-          </div>
-        )}
-
-        {/* Empty State */}
-        {!loading && filtered.length === 0 && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-            style={{ textAlign: 'center', padding: '60px 0', color: 'var(--text-muted)' }}>
-            <RiBookOpenLine size={48} style={{ margin: '0 auto 16px', opacity: 0.3, display: 'block' }} />
-            <p style={{ fontSize: 18, fontWeight: 600, color: 'var(--deep-green)' }}>No courses found</p>
-            <p style={{ fontSize: 14, marginTop: 8 }}>
-              {activeCategory !== 'All' ? `No courses under "${activeCategory}" yet.` : 'No courses have been added yet.'}
+        <div className="container">
+          {/* Header */}
+          <div style={{ textAlign: 'center', marginBottom: 48 }}>
+            <p className="font-pixel" style={{ fontSize: '9px', color: '#FF6F3C', margin: '0 0 12px 0' }}>SKILL TREE SELECTOR</p>
+            <h2 className="font-arcade" style={{ fontSize: '32px', color: '#1D2A44', margin: '0 0 16px 0' }}>CHOOSE YOUR QUEST PATH</h2>
+            <p style={{ color: '#5D6D7E', fontSize: '15px', maxWidth: 620, margin: '0 auto', lineHeight: 1.6 }}>
+              Select a category tab to filter. Unlock new heritage arts, master rhythm sequences, and earn certified ranks.
             </p>
-          </motion.div>
-        )}
+          </div>
 
-        {/* Course Grid */}
-        {!loading && paginated.length > 0 && (
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeCategory + currentPage}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.3 }}
-              style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(260px,1fr))', gap: 24, marginBottom: 40 }}>
-              {paginated.map((course, i) => {
-                const finalPrice = Math.max(0, (course.price || 0) - (course.discount || 0));
-                const isEnrolled = enrolledIds.includes(course._id);
-                
-                return (
-                  <motion.div key={course._id} custom={i}
-                    initial="hidden" animate="visible" variants={fadeUp}
-                    className="glass-card card-hover hover-lift"
-                    style={{ borderRadius: 20, overflow: 'hidden', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}
-                    whileHover={{ scale: 1.03 }}
-                    onClick={() => navigate(`/courses/${course._id}`)}>
+          {/* Category Filter Pills (Game Menu style tabs) */}
+          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 12, marginBottom: 48 }}>
+            {allCategories.map(cat => {
+              const isActive = activeCategory === cat.name
+              return (
+                <motion.button 
+                  key={cat.name} 
+                  onClick={() => handleCategoryChange(cat.name)}
+                  className="font-arcade"
+                  style={{
+                    padding: '8px 20px', 
+                    borderRadius: '12px', 
+                    fontSize: '12px', 
+                    fontWeight: 'bold',
+                    cursor: 'pointer',
+                    background: isActive ? '#1D2A44' : '#FDF6E3',
+                    color: isActive ? '#FDF6E3' : '#1D2A44',
+                    border: '3px solid #1D2A44',
+                    boxShadow: isActive ? 'none' : '3px 3px 0px #1D2A44',
+                    transform: isActive ? 'translate(2px, 2px)' : 'none',
+                    transition: 'all 0.15s ease'
+                  }}
+                  whileHover={!isActive ? { scale: 1.05 } : {}}
+                  whileTap={{ scale: 0.97 }}
+                >
+                  {cat.name.toUpperCase()}
+                </motion.button>
+              )
+            })}
+          </div>
 
-                    <div>
-                      {/* Card Top — Thumbnail or Placeholder */}
-                      <div style={{ position: 'relative', height: 168, overflow: 'hidden', background: 'linear-gradient(135deg,var(--deep-green),var(--deep-green-light))' }}>
-                        {course.thumbnail ? (
-                          <img
-                            src={`${API_BASE}${course.thumbnail}`}
-                            alt={course.title}
-                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                          />
-                        ) : (
-                          <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            <div style={{ position: 'absolute', width: 128, height: 128, borderRadius: '50%', border: '2px solid var(--gold)', opacity: 0.12 }} />
-                            <div style={{ position: 'relative', zIndex: 2, width: 64, height: 64, borderRadius: 16, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(201,168,76,0.15)', border: '1px solid rgba(201,168,76,0.3)' }}>
-                              <RiBookOpenLine size={28} color="var(--gold)" />
+          {/* Loading state */}
+          {loading && (
+            <div style={{ textAlign: 'center', padding: '80px 0', color: '#1D2A44' }}>
+              <div style={{ fontSize: '48px', marginBottom: 16 }} className="float-effect">🎮</div>
+              <p className="font-pixel" style={{ fontSize: '10px', color: '#FF6F3C' }}>LOADING CAMPAIGNS...</p>
+            </div>
+          )}
+
+          {/* Empty State */}
+          {!loading && filtered.length === 0 && (
+            <div style={{ textAlign: 'center', padding: '80px 0', background: 'rgba(29, 42, 68, 0.04)', borderRadius: '24px', border: '3px dashed #1D2A44' }}>
+              <RiFolderOpenLine size={48} style={{ margin: '0 auto 16px', color: '#FF6F3C' }} />
+              <h3 className="font-arcade" style={{ fontSize: '20px', color: '#1D2A44', margin: 0 }}>NO QUESTS UNLOCKED</h3>
+              <p style={{ fontSize: '14px', color: '#5D6D7E', marginTop: 8 }}>
+                No active courses under "{activeCategory}" category are currently available. Check back soon!
+              </p>
+            </div>
+          )}
+
+          {/* Course Skill Tree Grid */}
+          {!loading && paginated.length > 0 && (
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={activeCategory + currentPage}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.25 }}
+                style={{ 
+                  display: 'grid', 
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', 
+                  gap: 24, 
+                  marginBottom: 48 
+                }}
+              >
+                {paginated.map((course, i) => {
+                  const finalPrice = Math.max(0, (course.price || 0) - (course.discount || 0));
+                  const isEnrolled = enrolledIds.includes(course._id);
+                  
+                  return (
+                    <div 
+                      key={course._id}
+                      className="arcade-card"
+                      style={{ 
+                        display: 'flex', 
+                        flexDirection: 'column', 
+                        justifyContent: 'space-between',
+                        background: '#FDF6E3'
+                      }}
+                      onClick={() => navigate(`/courses/${course._id}`)}
+                    >
+                      <div>
+                        {/* Course Card Top Frame */}
+                        <div style={{ 
+                          position: 'relative', 
+                          height: 168, 
+                          overflow: 'hidden', 
+                          background: '#1D2A44',
+                          borderBottom: '3px solid #1D2A44'
+                        }} className="crt-screen">
+                          {course.thumbnail ? (
+                            <img
+                              src={`${API_BASE}${course.thumbnail}`}
+                              alt={course.title}
+                              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                            />
+                          ) : (
+                            <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                              <RiBookOpenLine size={36} color="#FDF6E3" />
                             </div>
-                          </div>
-                        )}
-                        {course.category && (
-                          <div style={{ position: 'absolute', top: 10, right: 10, padding: '3px 10px', borderRadius: 8, fontSize: 11, fontWeight: 600, background: 'rgba(0,0,0,0.6)', color: '#c9a84c', border: '1px solid rgba(201,168,76,0.4)', backdropFilter: 'blur(8px)' }}>
-                            {course.category}
-                          </div>
-                        )}
-                        {course.tag && (
-                          <div style={{ position: 'absolute', top: 10, left: 10, padding: '3px 10px', borderRadius: 8, fontSize: 11, fontWeight: 700, background: 'var(--gold)', color: 'var(--deep-green)', boxShadow: '0 2px 10px rgba(0,0,0,0.2)' }}>
-                            {course.tag}
-                          </div>
-                        )}
-                      </div>
+                          )}
+                          
+                          {/* Pixel Badges */}
+                          {course.category && (
+                            <div className="font-pixel" style={{ 
+                              position: 'absolute', 
+                              top: 10, 
+                              right: 10, 
+                              padding: '4px 8px', 
+                              borderRadius: '4px', 
+                              fontSize: '7px', 
+                              background: '#1D2A44', 
+                              color: '#F5B041', 
+                              border: '1.5px solid #F5B041' 
+                            }}>
+                              {course.category.toUpperCase()}
+                            </div>
+                          )}
+                          
+                          {course.tag && (
+                            <div className="font-pixel" style={{ 
+                              position: 'absolute', 
+                              top: 10, 
+                              left: 10, 
+                              padding: '4px 8px', 
+                              borderRadius: '4px', 
+                              fontSize: '7px', 
+                              background: '#FF6F3C', 
+                              color: '#FDF6E3', 
+                              border: '1.5px solid #1D2A44',
+                              boxShadow: '2px 2px 0px #1D2A44'
+                            }}>
+                              {course.tag.toUpperCase()}
+                            </div>
+                          )}
+                        </div>
 
-                      {/* Card Body */}
-                      <div style={{ padding: 18 }}>
-                        <h3 className="font-cormorant" style={{ fontWeight: 700, fontSize: 20, color: 'var(--deep-green)', marginBottom: 6 }}>{course.title}</h3>
-                        <p style={{ fontSize: 12, lineHeight: 1.6, color: 'var(--text-muted)', marginBottom: 14 }}>
-                          {course.description?.substring(0, 90)}{course.description?.length > 90 ? '...' : ''}
-                        </p>
+                        {/* Course Card Details */}
+                        <div style={{ padding: 20 }}>
+                          <h3 className="font-arcade" style={{ fontWeight: 700, fontSize: '18px', color: '#1D2A44', margin: '0 0 8px 0', lineHeight: 1.3 }}>
+                            {course.title}
+                          </h3>
+                          <p style={{ fontSize: '12px', lineHeight: 1.5, color: '#5D6D7E', marginBottom: 16 }} className="line-clamp-2">
+                            {course.description}
+                          </p>
 
-                        {/* Price & Duration */}
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '12px 0', fontSize: 13 }}>
-                          <div>
-                            {finalPrice > 0 ? (
-                              <>
-                                <span style={{ textDecoration: 'line-through', color: 'var(--text-muted)', marginRight: 6, fontSize: 11 }}>₹{course.price}</span>
-                                <span style={{ fontWeight: 700, color: 'var(--deep-green)', fontSize: 15 }}>₹{finalPrice}</span>
-                              </>
-                            ) : (
-                              <span style={{ fontWeight: 700, color: '#1a3a2a', background: 'rgba(74, 222, 128, 0.2)', padding: '2px 8px', borderRadius: 6, fontSize: 13 }}>FREE</span>
+                          {/* Level Cost & Playtime */}
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: 12, borderBottom: '2px dashed rgba(29, 42, 68, 0.15)', marginBottom: 12 }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                              <span className="font-pixel" style={{ fontSize: '8px', color: '#FF6F3C' }}>COST:</span>
+                              {finalPrice > 0 ? (
+                                <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+                                  <span style={{ textDecoration: 'line-through', color: '#5D6D7E', fontSize: '10px' }}>₹{course.price}</span>
+                                  <span className="font-arcade" style={{ fontWeight: 'bold', color: '#1D2A44', fontSize: '14px' }}>₹{finalPrice}</span>
+                                </div>
+                              ) : (
+                                <span className="font-pixel" style={{ fontSize: '8px', color: '#2ECC71', background: 'rgba(46, 204, 113, 0.15)', padding: '2px 6px', borderRadius: '4px', border: '1.5px solid #2ECC71' }}>FREE QUEST</span>
+                              )}
+                            </div>
+                            
+                            {course.duration && (
+                              <div style={{ display: 'flex', alignItems: 'center', gap: 4, color: '#5D6D7E', fontSize: '11px' }}>
+                                <RiTimeLine size={13} style={{ color: '#F5B041' }} />
+                                <span>{course.duration}</span>
+                              </div>
                             )}
                           </div>
-                          {course.duration && (
-                            <div style={{ display: 'flex', alignItems: 'center', gap: 4, color: 'var(--text-muted)', fontSize: 11 }}>
-                              <RiTimeLine size={12} color="var(--gold)" />
-                              <span>{course.duration}</span>
-                            </div>
-                          )}
-                        </div>
 
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: 12, borderTop: '1px solid rgba(201,168,76,0.15)' }}>
-                          {course.assignedTeacher && (
-                            <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                              <RiGroupLine size={12} style={{ color: 'var(--gold)' }} />
-                              <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>{course.assignedTeacher}</span>
-                            </div>
-                          )}
-                          {course.department && (
-                            <span style={{ fontSize: 11, fontWeight: 500, padding: '3px 8px', borderRadius: 999, background: 'rgba(201,168,76,0.1)', color: 'var(--gold-dark)' }}>
-                              {course.department}
-                            </span>
-                          )}
+                          {/* Guru & Department Info */}
+                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '11px' }}>
+                            {course.assignedTeacher && (
+                              <div style={{ display: 'flex', alignItems: 'center', gap: 4, color: '#5D6D7E' }}>
+                                <RiGroupLine size={13} style={{ color: '#FF6F3C' }} />
+                                <span>{course.assignedTeacher}</span>
+                              </div>
+                            )}
+                            {course.department && (
+                              <span className="font-arcade" style={{ fontSize: '9px', fontWeight: 'bold', padding: '3px 8px', borderRadius: '6px', background: 'rgba(29, 42, 68, 0.08)', color: '#1D2A44', border: '1.5px solid #1D2A44' }}>
+                                {course.department.toUpperCase()}
+                              </span>
+                            )}
+                          </div>
                         </div>
                       </div>
+
+                      {/* Action Buttons */}
+                      <div style={{ padding: '0 20px 20px 20px', display: 'flex', gap: 10 }}>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            navigate(`/courses/${course._id}`);
+                          }}
+                          className="arcade-btn btn-outline"
+                          style={{ flex: 1, padding: '8px 0', fontSize: '11px', borderRadius: '10px' }}
+                        >
+                          INFO [Y]
+                        </button>
+                        
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (isEnrolled) {
+                              navigate(`/student/dashboard`);
+                            } else {
+                              handleBuyClick(course);
+                            }
+                          }}
+                          className="arcade-btn btn-primary"
+                          style={{ flex: 1, padding: '8px 0', fontSize: '11px', borderRadius: '10px' }}
+                        >
+                          {isEnrolled ? 'ENROLLED ✓' : (finalPrice > 0 ? 'START [A]' : 'FREE [A]')}
+                        </button>
+                      </div>
                     </div>
+                  );
+                })}
+              </motion.div>
+            </AnimatePresence>
+          )}
 
-                    {/* Action Buttons */}
-                    <div style={{ padding: '0 18px 18px 18px', display: 'flex', gap: 8 }}>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          navigate(`/courses/${course._id}`);
-                        }}
-                        className="btn-outline"
-                        style={{ flex: 1, padding: '8px 0', borderRadius: 10, fontSize: 12, fontWeight: 600 }}
-                      >
-                        View Details
-                      </button>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          if (isEnrolled) {
-                            navigate(`/student/dashboard`);
-                          } else {
-                            handleBuyClick(course);
-                          }
-                        }}
-                        className="btn-primary"
-                        style={{ flex: 1, padding: '8px 0', borderRadius: 10, fontSize: 12, fontWeight: 700 }}
-                      >
-                        {isEnrolled ? 'Enrolled ✓' : (finalPrice > 0 ? 'Buy Now' : 'Enroll Free')}
-                      </button>
-                    </div>
-
-                  </motion.div>
-                );
-              })}
-            </motion.div>
-          </AnimatePresence>
-        )}
-
-        {/* Pagination */}
-        {!loading && totalPages > 1 && (
-          <motion.div initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : {}} transition={{ delay: 0.4 }}
-            style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 12, marginBottom: 40 }}>
-            <motion.button
-              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-              disabled={currentPage === 1}
-              style={{
-                width: 40, height: 40, borderRadius: '50%', border: '1px solid rgba(201,168,76,0.3)', background: 'rgba(26,58,42,0.06)',
-                color: 'var(--deep-green)', cursor: currentPage === 1 ? 'not-allowed' : 'pointer', opacity: currentPage === 1 ? 0.4 : 1,
-                display: 'flex', alignItems: 'center', justifyContent: 'center'
-              }}
-              whileHover={currentPage > 1 ? { scale: 1.1 } : {}}
-              whileTap={currentPage > 1 ? { scale: 0.95 } : {}}>
-              <RiArrowLeftLine />
-            </motion.button>
-
-            {Array.from({ length: totalPages }).map((_, i) => (
-              <motion.button key={i} onClick={() => setCurrentPage(i + 1)}
+          {/* Level Selector Pagination */}
+          {!loading && totalPages > 1 && (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 12, marginTop: 40, marginBottom: 20 }}>
+              <button
+                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+                className="arcade-btn"
                 style={{
-                  width: 40, height: 40, borderRadius: '50%', fontSize: 14, fontWeight: currentPage === i + 1 ? 700 : 500,
-                  border: `1px solid ${currentPage === i + 1 ? 'var(--gold)' : 'rgba(201,168,76,0.3)'}`,
-                  background: currentPage === i + 1 ? 'linear-gradient(135deg,var(--gold-dark),var(--gold))' : 'rgba(26,58,42,0.06)',
-                  color: currentPage === i + 1 ? 'var(--deep-green)' : 'var(--text-muted)', cursor: 'pointer',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center'
+                  width: 40, 
+                  height: 40, 
+                  borderRadius: '50%',
+                  background: currentPage === 1 ? 'rgba(29, 42, 68, 0.08)' : '#EEDDC2',
+                  color: '#1D2A44',
+                  cursor: currentPage === 1 ? 'not-allowed' : 'pointer',
+                  opacity: currentPage === 1 ? 0.4 : 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: 0
                 }}
-                whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
-                {i + 1}
-              </motion.button>
-            ))}
+              >
+                <RiArrowLeftLine size={16} />
+              </button>
 
-            <motion.button
-              onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-              disabled={currentPage === totalPages}
-              style={{
-                width: 40, height: 40, borderRadius: '50%', border: '1px solid rgba(201,168,76,0.3)', background: 'rgba(26,58,42,0.06)',
-                color: 'var(--deep-green)', cursor: currentPage === totalPages ? 'not-allowed' : 'pointer', opacity: currentPage === totalPages ? 0.4 : 1,
-                display: 'flex', alignItems: 'center', justifyContent: 'center'
-              }}
-              whileHover={currentPage < totalPages ? { scale: 1.1 } : {}}
-              whileTap={currentPage < totalPages ? { scale: 0.95 } : {}}>
-              <RiArrowRightLine />
-            </motion.button>
-          </motion.div>
-        )}
+              {Array.from({ length: totalPages }).map((_, i) => {
+                const isCurrent = currentPage === i + 1;
+                return (
+                  <button 
+                    key={i} 
+                    onClick={() => setCurrentPage(i + 1)}
+                    className="arcade-btn font-pixel"
+                    style={{
+                      width: 40, 
+                      height: 40, 
+                      borderRadius: '50%', 
+                      fontSize: '10px',
+                      background: isCurrent ? '#FF6F3C' : '#EEDDC2',
+                      color: isCurrent ? '#FDF6E3' : '#1D2A44',
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      padding: 0,
+                      boxShadow: isCurrent ? 'none' : '3px 3px 0px #1D2A44',
+                      transform: isCurrent ? 'translate(2px, 2px)' : 'none'
+                    }}
+                  >
+                    {i + 1}
+                  </button>
+                )
+              })}
 
-        {/* Total count */}
-        {!loading && filtered.length > 0 && (
-          <p style={{ textAlign: 'center', fontSize: 13, color: 'var(--text-muted)', marginBottom: 8 }}>
-            Showing {Math.min((currentPage - 1) * ITEMS_PER_PAGE + 1, filtered.length)}–{Math.min(currentPage * ITEMS_PER_PAGE, filtered.length)} of {filtered.length} courses
-          </p>
-        )}
-      </div>
-    </section>
+              <button
+                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                disabled={currentPage === totalPages}
+                className="arcade-btn"
+                style={{
+                  width: 40, 
+                  height: 40, 
+                  borderRadius: '50%',
+                  background: currentPage === totalPages ? 'rgba(29, 42, 68, 0.08)' : '#EEDDC2',
+                  color: '#1D2A44',
+                  cursor: currentPage === totalPages ? 'not-allowed' : 'pointer',
+                  opacity: currentPage === totalPages ? 0.4 : 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: 0
+                }}
+              >
+                <RiArrowRightLine size={16} />
+              </button>
+            </div>
+          )}
+
+          {/* Quest Counter count */}
+          {!loading && filtered.length > 0 && (
+            <p className="font-arcade" style={{ textAlign: 'center', fontSize: '11px', fontWeight: 'bold', color: '#5D6D7E', margin: '20px 0 0 0' }}>
+              SHOWING STAGES {Math.min((currentPage - 1) * ITEMS_PER_PAGE + 1, filtered.length)}–{Math.min(currentPage * ITEMS_PER_PAGE, filtered.length)} OF {filtered.length} CAMPAIGNS
+            </p>
+          )}
+        </div>
+      </section>
+    </>
   )
 }
 

@@ -6,12 +6,12 @@ import { User, LogOut, LayoutDashboard, ChevronDown } from 'lucide-react'
 import Context from '../../util/Context'
 
 const navLinks = [
-  { label: 'Home', href: '/#home' },
-  { label: 'About', href: '/#about' },
-  { label: 'Courses', href: '/#courses' },
-  { label: 'Events', href: '/#events' },
+  { label: 'Start', href: '/#home' },
+  { label: 'Story', href: '/#about' },
+  { label: 'Skill Tree', href: '/#courses' },
+  { label: 'Quests', href: '/#events' },
   { label: 'Gallery', href: '/#gallery' },
-  { label: 'Teachers', href: '/#teachers' },
+  { label: 'Guild', href: '/#teachers' },
   { label: 'Contact', href: '/#contact' },
 ]
 
@@ -75,99 +75,199 @@ const Navbar = () => {
 
   return (
     <motion.header
-      className={`nav-fixed ${scrolled ? 'nav-scrolled' : ''}`}
+      className="nav-fixed"
       style={{
-        background: scrolled ? 'rgba(26,58,42,0.98)' : 'transparent',
-        borderBottom: scrolled ? '1px solid rgba(201,168,76,0.1)' : 'none',
+        background: scrolled ? 'rgba(253, 246, 227, 0.95)' : 'rgba(253, 246, 227, 0.8)',
+        borderBottom: '4px solid #1D2A44',
+        backdropFilter: 'blur(12px)',
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 1000,
+        transition: 'all 0.3s ease'
       }}
-      initial={{ y: -100 }} animate={{ y: 0 }}
-      transition={{ duration: 0.6, ease: 'easeOut' }}
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.5 }}
     >
-      {/* Top bar */}
+      {/* Top Bar - RPG Notification Banner */}
       <div style={{
-        background: 'var(--deep-green)',
-        display: scrolled ? 'none' : 'block',
-        borderBottom: '1px solid rgba(255,255,255,0.05)'
+        background: '#1D2A44',
+        borderBottom: '3px solid #FF6F3C',
+        color: '#FDF6E3',
+        padding: '6px 24px',
+        fontSize: '11px',
+        display: scrolled ? 'none' : 'block'
       }} className="topbar">
         <style>{`.topbar { display: block; } @media(max-width:768px){.topbar{display:none !important;}}`}</style>
-        <div className="container flex-between" style={{ padding: '8px 24px' }}>
-          <div style={{ display: 'flex', gap: 24 }}>
-            {[{ icon: <RiPhoneLine size={13}/>, text: '+91 123 456 7890', href: 'tel:+911234567890' },
-              { icon: <RiMailLine size={13}/>, text: 'info@gsmacademy.com', href: 'mailto:info@gsmacademy.com' }]
-              .map(item => (
-              <a key={item.text} href={item.href}
-                style={{ display:'flex', alignItems:'center', gap:6, color:'rgba(201,168,76,0.8)', fontSize:12, textDecoration:'none' }}>
-                {item.icon} {item.text}
-              </a>
-            ))}
+        <div className="container flex-between">
+          <div style={{ display: 'flex', gap: 20 }} className="font-arcade">
+            <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <i className="ri-sword-line" style={{ color: '#F5B041' }} />
+              25+ YEARS OF ACADEMIC LEVELING
+            </span>
+            <a href="tel:+911234567890" style={{ display: 'flex', alignItems: 'center', gap: 6, color: '#FDF6E3', textDecoration: 'none' }}>
+              <RiPhoneLine size={12} style={{ color: '#FF6F3C' }} /> +91 123 456 7890
+            </a>
           </div>
-          <p style={{ color:'rgba(201,168,76,0.7)', fontSize:12 }}>25+ Years of Cultural Excellence</p>
+          <div className="font-pixel" style={{ fontSize: '8px', color: '#F5B041', letterSpacing: '1px' }}>
+            INSERT COIN TO START LEARNING
+          </div>
         </div>
       </div>
 
-      {/* Main Nav */}
+      {/* Main Navigation Panel */}
       <nav>
-        <div className="container" style={{ display:'flex', alignItems:'center', justifyContent:'space-between', padding:'16px 24px' }}>
-          {/* Logo */}
-          <Link to="/" style={{ display:'flex', alignItems:'center', gap:12, textDecoration:'none' }} onClick={() => window.scrollTo(0, 0)}>
-            <motion.div whileHover={{ scale: 1.02 }} style={{ display:'flex', alignItems:'center', gap:12 }}>
-              <img src="/src/assets/logo.png" alt="GSM Logo" style={{ height: 44, width: 'auto' }} />
+        <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 24px' }}>
+          {/* Logo Frame */}
+          <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none' }} onClick={() => window.scrollTo(0, 0)}>
+            <motion.div whileHover={{ scale: 1.02 }} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              {/* Retro Pixel border around logo */}
+              <div style={{
+                border: '3px solid #1D2A44',
+                padding: '4px',
+                background: '#EEDDC2',
+                borderRadius: '12px',
+                boxShadow: '3px 3px 0px #1D2A44',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}>
+                <img src="/src/assets/logo.png" alt="GSM Logo" style={{ height: 38, width: 'auto' }} />
+              </div>
               <div>
-                <p className="font-cormorant" style={{ color:'var(--gold)', fontWeight:700, fontSize:18, lineHeight:1 }}>GSM ACADEMY</p>
-                <p style={{ color:'rgba(201,168,76,0.6)', fontSize:10, letterSpacing:'0.15em' }}>CULTURAL EXCELLENCE</p>
+                <p className="font-arcade" style={{ color: '#1D2A44', fontWeight: 700, fontSize: '18px', margin: 0, letterSpacing: '0.5px' }}>GSM ACADEMY</p>
+                <p className="font-pixel" style={{ color: '#FF6F3C', fontSize: '7px', margin: 0, letterSpacing: '1px' }}>LEVEL SELECTOR</p>
               </div>
             </motion.div>
           </Link>
 
-          {/* Desktop links */}
-          <div className="nav-links" style={{ display:'flex', gap:4 }}>
-            {navLinks.map(link => (
-              <button
-                key={link.label}
-                onClick={() => handleNavClick(link.href)}
-                style={{
-                  position:'relative', padding:'8px 12px', fontSize:14, fontWeight:500,
-                  color: active === link.href ? 'var(--gold)' : 'rgba(255,255,255,0.85)',
-                  background: 'none', border: 'none', cursor: 'pointer', transition:'color 0.2s'
-                }}
-              >
-                {link.label}
-                {active === link.href && (
-                  <motion.span layoutId="ul"
-                    style={{ position:'absolute', bottom:0, left:8, right:8, height:2, borderRadius:1, background:'var(--gold)' }} />
-                )}
-              </button>
-            ))}
+          {/* Retro Level Menu links */}
+          <div className="nav-links" style={{ display: 'flex', gap: 2 }}>
+            {navLinks.map(link => {
+              const isActive = active === link.href;
+              return (
+                <button
+                  key={link.label}
+                  onClick={() => handleNavClick(link.href)}
+                  className="font-arcade"
+                  style={{
+                    position: 'relative',
+                    padding: '8px 16px',
+                    fontSize: '13px',
+                    fontWeight: 700,
+                    color: isActive ? '#FF6F3C' : '#1D2A44',
+                    background: isActive ? 'rgba(238, 221, 194, 0.5)' : 'transparent',
+                    border: isActive ? '3px solid #1D2A44' : '3px solid transparent',
+                    borderRadius: '10px',
+                    cursor: 'pointer',
+                    transition: 'all 0.15s ease',
+                    transform: isActive ? 'translateY(-1px)' : 'none',
+                    boxShadow: isActive ? '3px 3px 0px #1D2A44' : 'none'
+                  }}
+                >
+                  {link.label}
+                  {isActive && (
+                    <motion.span 
+                      layoutId="menu-arrow"
+                      style={{ 
+                        position: 'absolute', 
+                        bottom: '-12px', 
+                        left: '50%', 
+                        transform: 'translateX(-50%)', 
+                        fontSize: '9px',
+                        color: '#FF6F3C'
+                      }}
+                    >
+                      ▲
+                    </motion.span>
+                  )}
+                </button>
+              );
+            })}
           </div>
 
-          {/* CTA & Profile */}
-          <div className="nav-ctas" style={{ display:'flex', gap:12, alignItems: 'center' }}>
+          {/* RPG Status Actions */}
+          <div className="nav-ctas" style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
             {session ? (
               <div className="relative" ref={profileRef}>
+                {/* Logged In Status Panel */}
                 <button
                   onClick={() => setProfileOpen(!profileOpen)}
-                  style={{ display: 'flex', alignItems: 'center', gap: 8, color: 'var(--gold)', background: 'transparent', border: '1px solid var(--border-gold)', padding: '8px 16px', borderRadius: 10, cursor: 'pointer' }}
+                  className="arcade-btn"
+                  style={{
+                    background: '#EEDDC2',
+                    padding: '6px 14px',
+                    fontSize: '12px',
+                    color: '#1D2A44',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 8,
+                    borderRadius: '10px'
+                  }}
                 >
-                  <User size={16} />
-                  <span style={{ fontSize: 13, fontWeight: 600 }}>{session.fullname?.split(" ")[0] || "Profile"}</span>
-                  <ChevronDown size={14} style={{ transform: profileOpen ? 'rotate(180deg)' : 'none', transition: '0.3s' }} />
+                  {/* Small Avatar Frame */}
+                  <div style={{
+                    width: 22,
+                    height: 22,
+                    borderRadius: '4px',
+                    background: '#1D2A44',
+                    color: '#F5B041',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: '9px',
+                    fontWeight: 'bold',
+                    border: '2px solid #FF6F3C'
+                  }}>
+                    {session.fullname?.substring(0, 2).toUpperCase() || 'P1'}
+                  </div>
+                  <span className="font-arcade">{session.fullname?.split(" ")[0]}</span>
+                  <ChevronDown size={14} style={{ transform: profileOpen ? 'rotate(180deg)' : 'none', transition: '0.2s' }} />
                 </button>
 
                 <AnimatePresence>
                   {profileOpen && (
                     <motion.div
-                      initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 10 }}
-                      style={{ position: 'absolute', top: '100%', right: 0, marginTop: 12, background: 'var(--cream)', borderRadius: 12, overflow: 'hidden', minWidth: 200, boxShadow: '0 10px 30px rgba(0,0,0,0.2)', zIndex: 100 }}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 10 }}
+                      className="arcade-card"
+                      style={{
+                        position: 'absolute',
+                        top: '100%',
+                        right: 0,
+                        marginTop: 12,
+                        width: 240,
+                        padding: '16px',
+                        zIndex: 100,
+                        boxShadow: '6px 6px 0px #1D2A44'
+                      }}
                     >
-                      <div style={{ padding: '16px', borderBottom: '1px solid rgba(0,0,0,0.05)' }}>
-                        <p style={{ color: 'var(--ink)', fontSize: 14, fontWeight: 700, margin: 0 }}>{session.fullname}</p>
-                        <p style={{ color: 'var(--ink-soft)', fontSize: 12, margin: 0 }}>{session.email}</p>
+                      <div style={{ borderBottom: '3px dashed #1D2A44', paddingBottom: 12, marginBottom: 12 }}>
+                        <p className="font-arcade" style={{ color: '#1D2A44', fontSize: '14px', fontWeight: 700, margin: 0 }}>{session.fullname}</p>
+                        <p style={{ color: '#5D6D7E', fontSize: '11px', margin: 0, wordBreak: 'break-all' }}>{session.email}</p>
+                        
+                        {/* XP bar display */}
+                        <div style={{ marginTop: 8 }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '9px', fontWeight: 'bold', color: '#FF6F3C' }} className="font-pixel">
+                            <span>LVL 1 ACTIVE</span>
+                            <span>80% XP</span>
+                          </div>
+                          <div className="pixel-progress" style={{ height: 10, marginTop: 4 }}>
+                            <div className="pixel-progress-fill" style={{ width: '80%', background: '#F5B041' }}></div>
+                          </div>
+                        </div>
                       </div>
-                      <Link to={getDashboardLink(session.role)} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '12px 16px', textDecoration: 'none', color: 'var(--ink)' }}>
-                        <LayoutDashboard size={16} /> <span style={{ fontSize: 13, fontWeight: 500 }}>Dashboard</span>
+
+                      <Link to={getDashboardLink(session.role)} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 10px', textDecoration: 'none', color: '#1D2A44', borderRadius: '8px', background: 'rgba(245, 176, 65, 0.15)', border: '2px solid #1D2A44', marginBottom: 8 }} className="font-arcade">
+                        <LayoutDashboard size={14} />
+                        <span style={{ fontSize: '12px', fontWeight: 'bold' }}>Dashboard</span>
                       </Link>
-                      <button onClick={handleLogout} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 10, padding: '12px 16px', border: 'none', background: 'transparent', color: '#e53e3e', cursor: 'pointer', textAlign: 'left' }}>
-                        <LogOut size={16} /> <span style={{ fontSize: 13, fontWeight: 500 }}>Logout</span>
+                      
+                      <button onClick={handleLogout} style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 10, padding: '8px 10px', border: '2px solid #1D2A44', background: '#FF6F3C', color: '#FDF6E3', cursor: 'pointer', borderRadius: '8px' }} className="font-arcade">
+                        <LogOut size={14} />
+                        <span style={{ fontSize: '12px', fontWeight: 'bold' }}>Power Off</span>
                       </button>
                     </motion.div>
                   )}
@@ -176,57 +276,78 @@ const Navbar = () => {
             ) : (
               <>
                 <Link to="/login" style={{ textDecoration: 'none' }}>
-                  <motion.button className="btn-outline" style={{ padding:'8px 18px', borderRadius:10, fontSize:13 }}
-                    whileHover={{ scale:1.03 }} whileTap={{ scale:0.97 }}>Login</motion.button>
+                  <button className="arcade-btn btn-outline" style={{ padding: '6px 14px', fontSize: '12px', borderRadius: '10px' }}>
+                    Coin [IN]
+                  </button>
                 </Link>
                 <Link to="/signup" style={{ textDecoration: 'none' }}>
-                  <motion.button className="btn-primary" style={{ padding:'8px 20px', borderRadius:10, fontSize:13 }}
-                    whileHover={{ scale:1.03 }} whileTap={{ scale:0.97 }}>Enroll Now</motion.button>
+                  <button className="arcade-btn btn-primary" style={{ padding: '6px 16px', fontSize: '12px', borderRadius: '10px' }}>
+                    1P START
+                  </button>
                 </Link>
               </>
             )}
           </div>
 
-          {/* Hamburger */}
+          {/* Hamburger menu for mobile */}
           <button className="mobile-toggle" onClick={() => setMenuOpen(!menuOpen)}
-            style={{ background:'none', border:'none', color:'var(--gold)', cursor:'pointer' }}>
-            {menuOpen ? <RiCloseLine size={28}/> : <RiMenuLine size={28}/>}
+            style={{ background: 'none', border: 'none', color: '#1D2A44', cursor: 'pointer' }}>
+            {menuOpen ? <RiCloseLine size={28} /> : <RiMenuLine size={28} />}
           </button>
         </div>
 
-        {/* Mobile menu */}
+        {/* Mobile Dropdown Menu */}
         <AnimatePresence>
           {menuOpen && (
             <motion.div
-              initial={{ opacity:0, height:0 }} animate={{ opacity:1, height:'auto' }} exit={{ opacity:0, height:0 }}
-              style={{ background:'rgba(26,58,42,0.98)', borderTop:'1px solid var(--border-gold)', overflow: 'hidden' }}
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              style={{
+                background: '#FDF6E3',
+                borderTop: '3px solid #1D2A44',
+                borderBottom: '4px solid #1D2A44',
+                overflow: 'hidden'
+              }}
             >
-              <div style={{ padding:'16px 24px', display:'flex', flexDirection:'column', gap:4 }}>
+              <div style={{ padding: '16px 24px', display: 'flex', flexDirection: 'column', gap: 8 }}>
                 {navLinks.map((link, i) => (
-                  <button key={link.label}
+                  <button
+                    key={link.label}
                     onClick={() => handleNavClick(link.href)}
-                    style={{ padding:'12px 0', fontSize:14, fontWeight:500, color:'rgba(255,255,255,0.85)',
-                      background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left',
-                      width: '100%', borderBottom:'1px solid var(--border-gold)' }}>
+                    className="font-arcade"
+                    style={{
+                      padding: '10px 12px',
+                      fontSize: '14px',
+                      fontWeight: 700,
+                      color: '#1D2A44',
+                      background: 'none',
+                      border: 'none',
+                      borderBottom: '2px dashed rgba(29, 42, 68, 0.15)',
+                      cursor: 'pointer',
+                      textAlign: 'left',
+                      width: '100%'
+                    }}
+                  >
                     {link.label}
                   </button>
                 ))}
                 
-                <div style={{ display:'flex', gap:12, paddingTop:16 }}>
+                <div style={{ display: 'flex', gap: 12, paddingTop: 12 }}>
                   {session ? (
                     <>
-                      <Link to={getDashboardLink(session.role)} style={{ flex:1, textDecoration: 'none' }}>
-                        <button className="btn-outline" style={{ width: '100%', padding:'9px 0', borderRadius:10, fontSize:13 }}>Dashboard</button>
+                      <Link to={getDashboardLink(session.role)} style={{ flex: 1, textDecoration: 'none' }}>
+                        <button className="arcade-btn btn-outline" style={{ width: '100%', padding: '8px 0', fontSize: '12px' }}>Dashboard</button>
                       </Link>
-                      <button onClick={handleLogout} className="btn-primary" style={{ flex:1, padding:'9px 0', borderRadius:10, fontSize:13 }}>Logout</button>
+                      <button onClick={handleLogout} className="arcade-btn btn-primary" style={{ flex: 1, padding: '8px 0', fontSize: '12px' }}>Power Off</button>
                     </>
                   ) : (
                     <>
-                      <Link to="/login" style={{ flex:1, textDecoration: 'none' }}>
-                        <button className="btn-outline" style={{ width: '100%', padding:'9px 0', borderRadius:10, fontSize:13 }}>Login</button>
+                      <Link to="/login" style={{ flex: 1, textDecoration: 'none' }}>
+                        <button className="arcade-btn btn-outline" style={{ width: '100%', padding: '8px 0', fontSize: '12px' }}>Coin [IN]</button>
                       </Link>
-                      <Link to="/signup" style={{ flex:1, textDecoration: 'none' }}>
-                        <button className="btn-primary" style={{ width: '100%', padding:'9px 0', borderRadius:10, fontSize:13 }}>Enroll Now</button>
+                      <Link to="/signup" style={{ flex: 1, textDecoration: 'none' }}>
+                        <button className="arcade-btn btn-primary" style={{ width: '100%', padding: '8px 0', fontSize: '12px' }}>1P START</button>
                       </Link>
                     </>
                   )}

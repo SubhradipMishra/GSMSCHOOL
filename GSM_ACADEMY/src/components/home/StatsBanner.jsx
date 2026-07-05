@@ -2,27 +2,27 @@ import React, { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 
 const stats = [
-  { value: '25+', label: 'Years of Excellence', icon: 'ri-history-line' },
-  { value: '10K+', label: 'Students Trained', icon: 'ri-group-line' },
-  { value: '50+', label: 'Expert Teachers', icon: 'ri-user-star-line' },
-  { value: '12+', label: 'Art Forms', icon: 'ri-palette-line' },
-  { value: '200+', label: 'Events Hosted', icon: 'ri-calendar-event-line' },
-  { value: '98%', label: 'Satisfaction Rate', icon: 'ri-heart-line' },
+  { value: '25+', label: 'Years Active', sub: 'EXP Level', icon: '🏆', color: '#FF6F3C' },
+  { value: '10K+', label: 'Heroes Trained', sub: 'Active Players', icon: '🛡️', color: '#F5B041' },
+  { value: '50+', label: 'Expert Gurus', sub: 'Master Guild', icon: '🔮', color: '#2ECC71' },
+  { value: '12+', label: 'Skill Trees', sub: 'Art Forms', icon: '⚡', color: '#3498DB' },
+  { value: '200+', label: 'Quest Events', sub: 'Boss Raids', icon: '⚔️', color: '#9B59B6' },
+  { value: '98%', label: 'Success Rate', sub: 'Clear Rate', icon: '❤️', color: '#E74C3C' },
 ]
 
 const ticker = [
-  '✦ Bharatanatyam',
-  '✦ Kathak',
-  '✦ Tabla',
-  '✦ Vocal Music',
-  '✦ Flute',
-  '✦ Painting',
-  '✦ Sanskrit',
-  '✦ Chess',
-  '✦ Veena',
-  '✦ Mridangam',
-  '✦ Odissi',
-  '✦ Manipuri',
+  '✦ Bharatanatyam performance',
+  '✦ Kathak quest',
+  '✦ Tabla rhythm beat',
+  '✦ Vocal Music melody',
+  '✦ Flute high score',
+  '✦ Painting skill',
+  '✦ Sanskrit scroll',
+  '✦ Chess dungeon',
+  '✦ Veena loot',
+  '✦ Mridangam combo',
+  '✦ Odissi dance',
+  '✦ Manipuri level',
 ]
 
 const StatsBanner = () => {
@@ -31,52 +31,106 @@ const StatsBanner = () => {
 
   return (
     <>
-      {/* Scrolling Ticker */}
-      <div style={{ overflow: 'hidden', padding: '16px 0', position: 'relative', background: 'linear-gradient(135deg, var(--deep-green), var(--deep-green-light))', borderTop: '1px solid rgba(201,168,76,0.2)', borderBottom: '1px solid rgba(201,168,76,0.2)' }}>
+      {/* Level 2 Divider Connector */}
+      <div className="level-connector">
+        <div className="level-flag">LEVEL 2: STATS SCOREBOARD</div>
+      </div>
+
+      {/* Retro LED Marquee Banner Ticker */}
+      <div 
+        style={{ 
+          overflow: 'hidden', 
+          padding: '16px 0', 
+          position: 'relative', 
+          background: '#1D2A44', 
+          borderBottom: '4px solid #FF6F3C' 
+        }}
+      >
         <motion.div
           style={{ display: 'flex', gap: 32, whiteSpace: 'nowrap' }}
           animate={{ x: ['0%', '-50%'] }}
-          transition={{ duration: 22, repeat: Infinity, ease: 'linear' }}
+          transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
         >
           {[...ticker, ...ticker].map((item, i) => (
             <span
               key={i}
-              style={{ fontSize: 14, fontWeight: 500, letterSpacing: '0.05em', flexShrink: 0, color: i % 3 === 0 ? 'var(--gold)' : 'rgba(255,255,255,0.7)' }}
+              className="font-pixel"
+              style={{ 
+                fontSize: '10px', 
+                letterSpacing: '1px', 
+                flexShrink: 0, 
+                color: i % 2 === 0 ? '#F5B041' : '#FDF6E3' 
+              }}
             >
-              {item}
+              {item.toUpperCase()}
             </span>
           ))}
         </motion.div>
       </div>
 
-      {/* Stats Cards */}
-      <section id="stats" ref={ref} style={{ padding: '64px 0', position: 'relative', overflow: 'hidden', background: 'var(--cream)' }}>
+      {/* Scoreboard Cards */}
+      <section id="stats" ref={ref} style={{ padding: '80px 0', position: 'relative', overflow: 'hidden', background: '#FDF6E3' }}>
         <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: 16 }} className="stats-grid">
-            <style>{`.stats-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; } @media(max-width:1024px){.stats-grid{grid-template-columns:repeat(3,1fr);}} @media(max-width:768px){.stats-grid{grid-template-columns:repeat(2,1fr);}}`}</style>
+          {/* Header */}
+          <div style={{ textAlign: 'center', marginBottom: 48 }}>
+            <p className="font-pixel" style={{ fontSize: '9px', color: '#FF6F3C', margin: '0 0 10px 0' }}>LEADERBOARD STATS</p>
+            <h2 className="font-arcade" style={{ fontSize: '28px', color: '#1D2A44', margin: 0 }}>HIGH SCOREBOARD</h2>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(6, 1fr)', gap: 20 }} className="stats-grid">
+            <style>{`.stats-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 20px; } @media(max-width:1024px){.stats-grid{grid-template-columns:repeat(3,1fr);}} @media(max-width:768px){.stats-grid{grid-template-columns:repeat(2,1fr);}}`}</style>
+            
             {stats.map((s, i) => (
               <motion.div
                 key={s.label}
-                initial={{ opacity: 0, y: 30, scale: 0.9 }}
-                animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
-                transition={{ delay: i * 0.08, duration: 0.5, ease: 'easeOut' }}
-                className="glass-card hover-lift card-hover"
-                style={{ borderRadius: 16, padding: 20, textAlign: 'center' }}
-                whileHover={{ scale: 1.06 }}
+                initial={{ opacity: 0, y: 25 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ delay: i * 0.08, duration: 0.4 }}
+                className="arcade-card"
+                style={{ 
+                  padding: '24px 16px', 
+                  textAlign: 'center',
+                  background: 'rgba(253, 246, 227, 0.9)',
+                  boxShadow: '4px 4px 0px #1D2A44'
+                }}
+                whileHover={{ scale: 1.05, translateY: -3 }}
               >
-                <div style={{ width: 40, height: 40, borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px', background: 'linear-gradient(135deg, var(--deep-green), var(--deep-green-light))', border: '1px solid var(--border-gold)' }}>
-                  <i className={`${s.icon}`} style={{ fontSize: 18, color: 'var(--gold)' }} />
+                {/* Pixel Icon Badge */}
+                <div style={{ 
+                  width: 44, 
+                  height: 44, 
+                  borderRadius: '10px', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center', 
+                  margin: '0 auto 14px', 
+                  background: '#1D2A44', 
+                  border: `2px solid ${s.color}`,
+                  fontSize: '20px',
+                  boxShadow: `0px 0px 8px ${s.color}66`
+                }}>
+                  {s.icon}
                 </div>
-                <motion.p
-                  className="font-cormorant"
-                  style={{ fontWeight: 700, fontSize: 30, color: 'var(--deep-green)' }}
-                  initial={{ opacity: 0 }}
-                  animate={inView ? { opacity: 1 } : {}}
-                  transition={{ delay: 0.3 + i * 0.08 }}
+
+                <p 
+                  className="font-pixel" 
+                  style={{ 
+                    fontWeight: 'bold', 
+                    fontSize: '18px', 
+                    color: '#1D2A44', 
+                    margin: 0 
+                  }}
                 >
                   {s.value}
-                </motion.p>
-                <p style={{ fontSize: 12, marginTop: 4, lineHeight: 1.2, color: 'var(--text-muted)' }}>{s.label}</p>
+                </p>
+
+                <p className="font-arcade" style={{ fontSize: '11px', fontWeight: 'bold', marginTop: 8, marginBottom: 2, color: s.color }}>
+                  {s.label.toUpperCase()}
+                </p>
+                
+                <p style={{ fontSize: '11px', color: '#5D6D7E', margin: 0 }}>
+                  {s.sub}
+                </p>
               </motion.div>
             ))}
           </div>

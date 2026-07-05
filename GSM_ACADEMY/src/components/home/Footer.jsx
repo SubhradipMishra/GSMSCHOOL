@@ -1,16 +1,16 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import { RiMapPinLine, RiPhoneLine, RiMailLine, RiSendPlaneLine } from 'react-icons/ri'
+import { RiMapPinLine, RiPhoneLine, RiMailLine, RiSendPlaneLine, RiGamepadLine } from 'react-icons/ri'
 
 const quickLinks = [
-  { label: 'Home', href: '/#home' },
-  { label: 'About Us', href: '/#about' },
-  { label: 'Courses', href: '/#courses' },
-  { label: 'Events', href: '/#events' },
-  { label: 'Gallery', href: '/#gallery' },
-  { label: 'Teachers', href: '/#teachers' },
-  { label: 'Contact', href: '/#contact' },
-  { label: 'FAQs', href: '/#faqs' },
+  { label: 'Start Map', href: '/#home' },
+  { label: 'Our Story', href: '/#about' },
+  { label: 'Skill Trees', href: '/#courses' },
+  { label: 'Quests Room', href: '/#events' },
+  { label: 'Gallery Logs', href: '/#gallery' },
+  { label: 'Guild Masters', href: '/#teachers' },
+  { label: 'HQ Contact', href: '/#contact' },
+  { label: 'Help FAQs', href: '/#faqs' },
 ]
 
 const socialLinks = [
@@ -22,120 +22,222 @@ const socialLinks = [
 
 const Footer = () => {
   return (
-    <footer id="contact" style={{ background: 'var(--deep-green)' }}>
-      {/* Main Footer */}
-      <div className="container" style={{ padding: '64px 24px', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 40 }}>
-        {/* Brand */}
+    <footer id="contact" style={{ background: '#1D2A44', borderTop: '4px solid #FF6F3C', color: '#FDF6E3' }}>
+      {/* Top Blinking Led Bar */}
+      <div style={{ background: '#FF6F3C', padding: '8px 0', textAlign: 'center', borderBottom: '3px solid #1D2A44' }}>
+        <p className="font-pixel" style={{ fontSize: '8px', color: '#1D2A44', margin: 0, letterSpacing: '1px' }}>
+          ★ CONGRATULATIONS! YOU CLEARED ALL STAGES ★
+        </p>
+      </div>
+
+      {/* Main Footer content grid */}
+      <div className="container" style={{ padding: '64px 24px', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 40 }} className="footer-grid">
+        <style>{`
+          .footer-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; }
+          @media(max-width: 1024px) {
+            .footer-grid { grid-template-columns: repeat(2, 1fr) !important; }
+          }
+          @media(max-width: 600px) {
+            .footer-grid { grid-template-columns: 1fr !important; }
+          }
+        `}</style>
+
+        {/* Brand info */}
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
-            <img src="/src/assets/logo.png" alt="GSM Logo" style={{ height: 40, width: 'auto' }} />
+            {/* Pixel Logo boundary */}
+            <div style={{
+              border: '2px solid #FDF6E3',
+              padding: '4px',
+              background: '#EEDDC2',
+              borderRadius: '8px',
+              display: 'flex',
+              alignItems: 'center'
+            }}>
+              <img src="/src/assets/logo.png" alt="GSM Logo" style={{ height: 32, width: 'auto' }} />
+            </div>
             <div>
-              <p className="font-cormorant" style={{ fontWeight: 700, fontSize: 18, color: 'var(--gold)' }}>GSM ACADEMY</p>
-              <p style={{ fontSize: 10, letterSpacing: '0.15em', color: 'rgba(201,168,76,0.5)' }}>CULTURAL EXCELLENCE</p>
+              <p className="font-arcade" style={{ fontWeight: 700, fontSize: '18px', color: '#FF6F3C', margin: 0 }}>GSM ACADEMY</p>
+              <p className="font-pixel" style={{ fontSize: '7px', color: '#F5B041', margin: 0, letterSpacing: '0.5px' }}>GAME SAVED</p>
             </div>
           </div>
-          <p style={{ fontSize: 14, lineHeight: 1.7, marginBottom: 24, color: 'rgba(255,255,255,0.55)' }}>
-            Preserving Heritage, Building Future Generations through classical arts, cultural celebration and value-based education.
+          <p style={{ fontSize: '13px', lineHeight: 1.6, marginBottom: 24, color: '#CCD1D1' }}>
+            Preserving classical heritage, training future generations through Indian arts, traditional values, and structured game-inspired learning dashboard modules.
           </p>
-          <div style={{ display: 'flex', gap: 12 }}>
+          
+          {/* Social connections */}
+          <div style={{ display: 'flex', gap: 10 }}>
             {socialLinks.map(s => (
               <motion.a
                 key={s.label}
                 href={s.href}
                 aria-label={s.label}
-                style={{ width: 36, height: 36, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(201,168,76,0.1)', border: '1px solid rgba(201,168,76,0.2)', color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}
-                whileHover={{ scale: 1.15, background: 'rgba(201,168,76,0.2)', color: 'var(--gold)' }}
+                className="arcade-btn"
+                style={{ 
+                  width: 32, 
+                  height: 32, 
+                  borderRadius: '6px', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center', 
+                  background: '#EEDDC2', 
+                  color: '#1D2A44', 
+                  textDecoration: 'none',
+                  padding: 0,
+                  boxShadow: '2px 2px 0px #FDF6E3'
+                }}
+                whileHover={{ scale: 1.1, y: -2 }}
               >
-                <i className={s.icon} />
+                <i className={s.icon} style={{ fontSize: '14px' }} />
               </motion.a>
             ))}
           </div>
         </div>
 
-        {/* Quick Links */}
+        {/* Quick Pause Menu Links */}
         <div>
-          <p className="font-cormorant" style={{ fontWeight: 600, fontSize: 18, marginBottom: 20, color: 'var(--gold)' }}>Quick Links</p>
-          <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <p className="font-arcade" style={{ fontWeight: 'bold', fontSize: '18px', marginBottom: 20, color: '#F5B041' }}>LEVEL MAP</p>
+          <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'grid', gridTemplateColumns: '1fr', gap: 8 }}>
             {quickLinks.map(l => (
               <li key={l.label}>
-                <a href={l.href} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14, color: 'rgba(255,255,255,0.55)', textDecoration: 'none', transition: 'color 0.2s' }}>
-                  <span style={{ width: 4, height: 4, borderRadius: '50%', background: 'var(--gold)', opacity: 0.5 }} />
-                  {l.label}
+                <a 
+                  href={l.href} 
+                  className="font-arcade"
+                  style={{ 
+                    display: 'flex', 
+                    alignItems: 'center', 
+                    gap: 6, 
+                    fontSize: '12px', 
+                    color: '#CCD1D1', 
+                    textDecoration: 'none', 
+                    transition: 'color 0.2s' 
+                  }}
+                >
+                  <span style={{ color: '#FF6F3C' }}>▶</span>
+                  {l.label.toUpperCase()}
                 </a>
               </li>
             ))}
           </ul>
         </div>
 
-        {/* Contact Info */}
+        {/* Contact Info Tab */}
         <div>
-          <p className="font-cormorant" style={{ fontWeight: 600, fontSize: 18, marginBottom: 20, color: 'var(--gold)' }}>Contact Info</p>
+          <p className="font-arcade" style={{ fontWeight: 'bold', fontSize: '18px', marginBottom: 20, color: '#F5B041' }}>GUILD STATION</p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
-              <div style={{ width: 32, height: 32, borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 2, background: 'rgba(201,168,76,0.1)', border: '1px solid rgba(201,168,76,0.2)' }}>
-                <RiMapPinLine size={14} style={{ color: 'var(--gold)' }} />
+              <div style={{ 
+                width: 30, 
+                height: 30, 
+                borderRadius: '6px', 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center', 
+                flexShrink: 0, 
+                background: '#EEDDC2', 
+                border: '2px solid #1D2A44',
+                color: '#1D2A44'
+              }}>
+                <RiMapPinLine size={14} />
               </div>
-              <p style={{ fontSize: 14, lineHeight: 1.7, color: 'rgba(255,255,255,0.6)' }}>
+              <p style={{ fontSize: '13px', lineHeight: 1.5, color: '#CCD1D1', margin: 0 }}>
                 123 Heritage Road, Kolkata – 700 001
               </p>
             </div>
+            
             <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              <div style={{ width: 32, height: 32, borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, background: 'rgba(201,168,76,0.1)', border: '1px solid rgba(201,168,76,0.2)' }}>
-                <RiPhoneLine size={14} style={{ color: 'var(--gold)' }} />
+              <div style={{ 
+                width: 30, 
+                height: 30, 
+                borderRadius: '6px', 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center', 
+                flexShrink: 0, 
+                background: '#EEDDC2', 
+                border: '2px solid #1D2A44',
+                color: '#1D2A44'
+              }}>
+                <RiPhoneLine size={14} />
               </div>
-              <a href="tel:+911234567890" style={{ fontSize: 14, color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>
+              <a href="tel:+911234567890" style={{ fontSize: '13px', color: '#CCD1D1', textDecoration: 'none' }} className="font-arcade">
                 +91 123 456 7890
               </a>
             </div>
+
             <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-              <div style={{ width: 32, height: 32, borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, background: 'rgba(201,168,76,0.1)', border: '1px solid rgba(201,168,76,0.2)' }}>
-                <RiMailLine size={14} style={{ color: 'var(--gold)' }} />
+              <div style={{ 
+                width: 30, 
+                height: 30, 
+                borderRadius: '6px', 
+                display: 'flex', 
+                alignItems: 'center', 
+                justifyContent: 'center', 
+                flexShrink: 0, 
+                background: '#EEDDC2', 
+                border: '2px solid #1D2A44',
+                color: '#1D2A44'
+              }}>
+                <RiMailLine size={14} />
               </div>
-              <a href="mailto:info@gsmacademy.com" style={{ fontSize: 14, color: 'rgba(255,255,255,0.6)', textDecoration: 'none' }}>
+              <a href="mailto:info@gsmacademy.com" style={{ fontSize: '13px', color: '#CCD1D1', textDecoration: 'none' }}>
                 info@gsmacademy.com
               </a>
             </div>
           </div>
         </div>
 
-        {/* Newsletter */}
+        {/* Newsletter Saveprogress form */}
         <div>
-          <p className="font-cormorant" style={{ fontWeight: 600, fontSize: 18, marginBottom: 8, color: 'var(--gold)' }}>Newsletter</p>
-          <p style={{ fontSize: 14, marginBottom: 20, color: 'rgba(255,255,255,0.55)' }}>
-            Stay updated with our latest events and courses.
+          <p className="font-arcade" style={{ fontWeight: 'bold', fontSize: '18px', marginBottom: 8, color: '#F5B041' }}>SAVE SYSTEM PROGRESS</p>
+          <p style={{ fontSize: '13px', marginBottom: 20, color: '#CCD1D1' }}>
+            Subscribe to save your quest newsletter progress and get event alarms.
           </p>
-          <div style={{ display: 'flex', gap: 8 }}>
+          
+          {/* Save Progress input block */}
+          <div style={{ display: 'flex', gap: 6, position: 'relative' }}>
             <input
               type="email"
-              placeholder="Enter your email"
-              style={{ flex: 1, padding: '10px 16px', borderRadius: 12, fontSize: 14, outline: 'none', background: 'rgba(255,255,255,0.07)', border: '1px solid rgba(201,168,76,0.2)', color: 'rgba(255,255,255,0.8)' }}
+              placeholder="Enter hero email"
+              style={{ 
+                flex: 1, 
+                padding: '10px 14px', 
+                borderRadius: '10px', 
+                fontSize: '12px', 
+                outline: 'none', 
+                background: 'rgba(253, 246, 227, 0.1)', 
+                border: '3px solid #FDF6E3', 
+                color: '#FDF6E3',
+              }}
+              className="font-arcade"
             />
-            <motion.button
-              className="btn-primary"
-              style={{ padding: '10px 16px', borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.97 }}
+            
+            <button
+              className="arcade-btn btn-secondary"
+              style={{ padding: '0 12px', borderRadius: '10px' }}
               id="newsletter-submit"
             >
-              <RiSendPlaneLine size={16} />
-            </motion.button>
+              <RiSendPlaneLine size={14} />
+            </button>
           </div>
-          <p style={{ fontSize: 12, marginTop: 12, color: 'rgba(255,255,255,0.35)' }}>
-            No spam. Unsubscribe anytime.
+          
+          <p className="font-pixel" style={{ fontSize: '7px', marginTop: 12, color: '#F5B041', letterSpacing: '0.5px' }}>
+            AUTO-SAVE ENABLED. NO SPAM GUARANTEED.
           </p>
         </div>
       </div>
 
-      {/* Bottom Bar */}
-      <div style={{ borderTop: '1px solid rgba(201,168,76,0.12)' }}>
-        <div className="container" style={{ padding: '20px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)' }}>
-            © 2024 GSM Academy. All Rights Reserved.
+      {/* Copyright bottom strip */}
+      <div style={{ borderTop: '3px solid rgba(253, 246, 227, 0.15)', background: 'rgba(0,0,0,0.2)' }}>
+        <div className="container" style={{ padding: '20px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10 }}>
+          <p className="font-arcade" style={{ fontSize: '11px', color: '#CCD1D1', margin: 0 }}>
+            © 2024 GSM ACADEMY. ALL STAGES CLEAR.
           </p>
+          
           <div style={{ display: 'flex', gap: 20 }}>
-            {['Privacy Policy', 'Terms of Use'].map(item => (
-              <a key={item} href="#" style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)', textDecoration: 'none', transition: 'color 0.2s' }}>
-                {item}
+            {['Privacy Policy', 'Terms of Service'].map(item => (
+              <a key={item} href="#" className="font-arcade" style={{ fontSize: '11px', color: '#CCD1D1', textDecoration: 'none' }}>
+                {item.toUpperCase()}
               </a>
             ))}
           </div>

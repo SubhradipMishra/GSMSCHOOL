@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useContext } from 'react'
 import { motion, AnimatePresence, useInView } from 'framer-motion'
-import { RiMapPinLine, RiTimeLine, RiTicketLine, RiDownloadLine, RiLockLine, RiCheckboxCircleLine, RiFileListLine, RiShirtLine, RiAlertLine } from 'react-icons/ri'
+import { RiMapPinLine, RiTimeLine, RiTicketLine, RiDownloadLine, RiLockLine, RiCheckboxCircleLine, RiFileListLine, RiShirtLine, RiAlertLine, RiSkullLine } from 'react-icons/ri'
 import { useRazorpay } from 'react-razorpay'
 import { useNavigate } from 'react-router-dom'
 import Context from '../../util/Context'
@@ -35,16 +35,21 @@ const useCountdown = (targetDate) => {
 }
 
 const CBox = ({ value, label }) => (
-  <div className="countdown-box" style={{
-    background: 'rgba(255,255,255,0.03)',
-    border: '1px solid rgba(201,168,76,0.15)',
+  <div style={{
+    background: '#1D2A44',
+    border: '3px solid #FF6F3C',
     borderRadius: '12px',
     padding: '12px 18px',
-    minWidth: '70px',
-    textAlign: 'center'
+    minWidth: '76px',
+    textAlign: 'center',
+    boxShadow: '3px 3px 0px #FF6F3C'
   }}>
-    <p className="font-cormorant" style={{ fontWeight: 700, fontSize: 32, color: 'var(--gold)', margin: 0, lineHeight: 1 }}>{String(value).padStart(2, '0')}</p>
-    <p style={{ fontSize: 10, color: 'rgba(255,255,255,0.5)', marginTop: 4, margin: 0, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{label}</p>
+    <p className="font-pixel" style={{ fontWeight: 'bold', fontSize: '20px', color: '#FDF6E3', margin: 0, lineHeight: 1.1 }}>
+      {String(value).padStart(2, '0')}
+    </p>
+    <p className="font-pixel" style={{ fontSize: '7px', color: '#F5B041', marginTop: 6, margin: 0, letterSpacing: '0.5px' }}>
+      {label}
+    </p>
   </div>
 )
 
@@ -112,14 +117,12 @@ const Events = () => {
       setBookingInProgress(true)
       const { data } = await API.post('/events/student/bookings/free', { eventId });
       if (data.success) {
-        toast.success("🎟️ Seat Booked Successfully! Confirmation email sent.");
-        // Reload details
+        toast.success("🎟️ Party Joined! Confirmation letter added to inventory email.");
         loadData();
-        // Update selected event details in modal
         setSelectedEvent(prev => prev ? { ...prev, seatsBooked: (prev.seatsBooked || 0) + 1 } : null);
       }
     } catch (err) {
-      toast.error(err.response?.data?.message || "Failed to book seat");
+      toast.error(err.response?.data?.message || "Failed to join party");
     } finally {
       setBookingInProgress(false);
     }
@@ -135,10 +138,10 @@ const Events = () => {
         amount: data.order.amount,
         currency: data.order.currency,
         name: "GSM ACADEMY",
-        description: `Event Entry: ${event.title}`,
+        description: `Entry Quest: ${event.title}`,
         order_id: data.order.id,
         handler: (response) => {
-          toast.success("🎉 Payment Successful! Your seat is booked. Ticket details sent to email.");
+          toast.success("🎉 Quest Confirmed! Ticket added to inventory. Check email.");
           loadData();
           setSelectedEvent(prev => prev ? { ...prev, seatsBooked: (prev.seatsBooked || 0) + 1 } : null);
           setBookingInProgress(false);
@@ -155,11 +158,11 @@ const Events = () => {
         modal: {
           ondismiss: () => {
             setBookingInProgress(false);
-            toast.warn("Payment window closed.");
+            toast.warn("Payment checkout closed.");
           }
         },
         theme: {
-          color: "#c9a84c"
+          color: "#FF6F3C"
         }
       };
 
@@ -167,316 +170,435 @@ const Events = () => {
       rzp.open();
     } catch (err) {
       setBookingInProgress(false);
-      toast.error(err.response?.data?.message || "Failed to initiate checkout");
+      toast.error(err.response?.data?.message || "Failed to initiate payment");
     }
   };
 
   return (
-    <section id="events" ref={ref}
-      style={{ padding: '96px 0', position: 'relative', overflow: 'hidden', background: 'linear-gradient(180deg,#f0e8d0,var(--cream))' }}>
-      <ToastContainer theme="dark" position="bottom-right" />
-      <div style={{ position: 'absolute', top: 0, right: 0, width: 288, height: 288, borderRadius: '50%', background: 'radial-gradient(circle,var(--gold),transparent)', opacity: 0.04, transform: 'translate(30%,-30%)', pointerEvents: 'none' }} />
+    <>
+      {/* Level 5 Connector */}
+      <div className="level-connector">
+        <div className="level-flag">LEVEL 5: DAILY QUESTS & BOSS EVENTS</div>
+      </div>
 
-      <div className="container">
-        {/* Header */}
-        <motion.div className="text-center" style={{ marginBottom: 48 }}
-          initial={{ opacity: 0, y: 30 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.6 }}>
-          <p className="ornamental-border" style={{ fontSize: 11, letterSpacing: '0.12em', fontWeight: 600, color: 'var(--gold)', marginBottom: 12 }}>MARK YOUR CALENDAR</p>
-          <h2 className="font-cormorant section-heading">Upcoming Cultural Events</h2>
-          <div className="section-divider" style={{ margin: '12px auto 20px' }} />
-          <p className="section-sub" style={{ margin: '0 auto' }}>
-            Join us for spectacular celebrations that bring our cultural community together in joy and artistry.
-          </p>
-        </motion.div>
+      <section id="events" ref={ref} style={{ padding: '96px 0', position: 'relative', overflow: 'hidden', background: '#FDF6E3' }}>
+        <ToastContainer theme="colored" position="bottom-right" />
+        {/* Decorative elements */}
+        <div style={{ position: 'absolute', top: 0, right: 0, width: 288, height: 288, borderRadius: '50%', border: '4px dashed rgba(29, 42, 68, 0.05)', pointerEvents: 'none' }} />
 
-        {/* Dynamic Event cards */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 24, marginBottom: 48 }}>
-          {dbEvents.length === 0 ? (
-            <div className="col-span-full text-center py-10" style={{ color: 'var(--deep-green)', opacity: 0.6 }}>
-              <p className="font-medium">No events scheduled at the moment. Check back soon!</p>
-            </div>
-          ) : (
-            dbEvents.map((ev, i) => {
-              const seatsLeft = ev.seat - (ev.seatsBooked || 0);
-              const pct = Math.round(((ev.seatsBooked || 0) / ev.seat) * 100);
-              const evDate = new Date(ev.date);
-              const day = evDate.getDate();
-              const month = evDate.toLocaleDateString('en-IN', { month: 'short' }).toUpperCase();
-              const year = evDate.getFullYear();
-              const isBooked = isUserBooked(ev._id);
+        <div className="container">
+          {/* Header */}
+          <div style={{ textAlign: 'center', marginBottom: 48 }}>
+            <p className="font-pixel" style={{ fontSize: '9px', color: '#FF6F3C', margin: '0 0 12px 0' }}>WORLD EVENTS</p>
+            <h2 className="font-arcade" style={{ fontSize: '32px', color: '#1D2A44', margin: '0 0 16px 0' }}>ACTIVE GUILD QUESTS</h2>
+            <p style={{ color: '#5D6D7E', fontSize: '15px', maxWidth: 620, margin: '0 auto', lineHeight: 1.6 }}>
+              Join spectacular celebrations and masterclasses. Form alliances, reserve tickets, and build cultural heritage XP.
+            </p>
+          </div>
 
-              return (
-                <motion.div key={ev._id}
-                  initial={{ opacity: 0, y: 40 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ delay: i * 0.12, duration: 0.6 }}
-                  className="hover-lift card-hover"
-                  style={{
-                    borderRadius: 20,
-                    overflow: 'hidden',
-                    cursor: 'pointer',
-                    background: 'rgba(255,255,255,0.75)',
-                    border: '1px solid rgba(201,168,76,0.18)',
-                    backdropFilter: 'blur(20px)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between'
-                  }}
-                  onClick={() => handleRegisterClick(ev)}
-                  whileHover={{ scale: 1.02 }}>
+          {/* Quests list */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: 24, marginBottom: 64 }}>
+            {dbEvents.length === 0 ? (
+              <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '40px', background: 'rgba(29,42,68,0.04)', borderRadius: 20, border: '3px dashed #1D2A44' }}>
+                <RiSkullLine size={32} style={{ color: '#FF6F3C', margin: '0 auto 12px' }} />
+                <p className="font-arcade" style={{ color: '#1D2A44', fontSize: '16px', margin: 0 }}>NO ACTIVE QUESTS LOGGED</p>
+                <p style={{ color: '#5D6D7E', fontSize: '13px', marginTop: 8 }}>Check back later for newly scheduled guild events!</p>
+              </div>
+            ) : (
+              dbEvents.map((ev, i) => {
+                const seatsLeft = ev.seat - (ev.seatsBooked || 0);
+                const pct = Math.min(100, Math.round(((ev.seatsBooked || 0) / ev.seat) * 100));
+                const evDate = new Date(ev.date);
+                const day = evDate.getDate();
+                const month = evDate.toLocaleDateString('en-IN', { month: 'short' }).toUpperCase();
+                const year = evDate.getFullYear();
+                const isBooked = isUserBooked(ev._id);
 
-                  <div>
-                    {/* Subject badge */}
-                    <div style={{ relative: true, padding: '20px 20px 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <div style={{
-                        padding: '4px 10px', borderRadius: 999, fontSize: 11, fontWeight: 600,
-                        background: 'rgba(201,168,76,0.15)', color: 'var(--gold-dark)', border: '1px solid rgba(201,168,76,0.3)'
-                      }}>
-                        {ev.subject}
-                      </div>
-                      <span className="text-[11px] font-bold" style={{ color: ev.price === 0 ? '#16a34a' : 'var(--gold-dark)' }}>
-                        {ev.price === 0 ? 'FREE' : `₹${ev.price}`}
-                      </span>
-                    </div>
-
-                    <div style={{ padding: '16px 20px 20px' }}>
-                      {/* Date + title */}
-                      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 14, marginBottom: 14 }}>
-                        <div style={{
-                          textAlign: 'center', minWidth: 56, padding: '10px 12px', borderRadius: 12,
-                          background: 'rgba(201,168,76,0.1)', border: '1px solid rgba(201,168,76,0.2)', flexShrink: 0
+                return (
+                  <motion.div 
+                    key={ev._id}
+                    className="arcade-card"
+                    style={{
+                      background: 'rgba(253, 246, 227, 0.9)',
+                      boxShadow: '4px 4px 0px #1D2A44',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between',
+                      cursor: 'pointer'
+                    }}
+                    onClick={() => handleRegisterClick(ev)}
+                    whileHover={{ scale: 1.02, translateY: -2 }}
+                  >
+                    <div>
+                      {/* Quest Header */}
+                      <div style={{ padding: '20px 20px 0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <span className="font-pixel" style={{
+                          fontSize: '8px',
+                          padding: '4px 8px',
+                          borderRadius: '6px',
+                          background: '#EEDDC2',
+                          color: '#1D2A44',
+                          border: '2px solid #1D2A44'
                         }}>
-                          <p className="font-cormorant" style={{ fontWeight: 700, fontSize: 26, lineHeight: 1, color: 'var(--gold-dark)' }}>{day}</p>
-                          <p style={{ fontSize: 10, fontWeight: 600, marginTop: 2, color: 'var(--text-muted)' }}>{month}</p>
-                          <p style={{ fontSize: 10, color: 'var(--text-muted)' }}>{year}</p>
-                        </div>
-                        <div>
-                          <h3 className="font-cormorant text-xl font-bold" style={{ color: 'var(--deep-green)', marginBottom: 4, lineHeight: 1.2 }}>{ev.title}</h3>
-                          <p style={{ fontSize: 12, color: 'rgba(26,58,42,0.6)' }}>Organised by: {ev.organiser}</p>
-                        </div>
+                          {ev.subject.toUpperCase()}
+                        </span>
+                        <span className="font-pixel" style={{ fontSize: '8px', color: ev.price === 0 ? '#2ECC71' : '#FF6F3C' }}>
+                          {ev.price === 0 ? 'FREE LOOT' : `COST: ₹${ev.price}`}
+                        </span>
                       </div>
 
-                      <p style={{ fontSize: 13, lineHeight: 1.6, color: 'var(--text-muted)', marginBottom: 14 }} className="line-clamp-2">{ev.description}</p>
+                      {/* Quest Info */}
+                      <div style={{ padding: '16px 20px 20px' }}>
+                        <div style={{ display: 'flex', gap: 16, marginBottom: 14 }}>
+                          {/* Calendar Node */}
+                          <div style={{
+                            textAlign: 'center',
+                            minWidth: '58px',
+                            padding: '10px 8px',
+                            background: '#1D2A44',
+                            border: '3px solid #1D2A44',
+                            borderRadius: '12px',
+                            boxShadow: '2px 2px 0px #FF6F3C',
+                            color: '#FDF6E3',
+                            flexShrink: 0
+                          }}>
+                            <p className="font-pixel" style={{ fontSize: '18px', fontWeight: 'bold', margin: 0, color: '#F5B041' }}>{day}</p>
+                            <p className="font-pixel" style={{ fontSize: '8px', margin: '4px 0 2px 0' }}>{month}</p>
+                            <p className="font-pixel" style={{ fontSize: '6px', margin: 0, color: '#CCD1D1' }}>{year}</p>
+                          </div>
+                          
+                          <div>
+                            <h3 className="font-arcade" style={{ fontSize: '18px', color: '#1D2A44', margin: '0 0 4px 0', lineHeight: 1.2, fontWeight: 'bold' }}>
+                              {ev.title}
+                            </h3>
+                            <p style={{ fontSize: '12px', color: '#5D6D7E', margin: 0 }}>Guild Master: {ev.organiser}</p>
+                          </div>
+                        </div>
 
-                      {/* Details */}
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 14 }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                          <RiTimeLine size={12} style={{ color: 'var(--gold-dark)' }} />
-                          <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>{ev.time}</span>
-                        </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                          <RiMapPinLine size={12} style={{ color: 'var(--gold-dark)' }} />
-                          <span style={{ fontSize: 12, color: 'var(--text-muted)' }} className="line-clamp-1">{ev.place}</span>
-                        </div>
-                      </div>
-
-                      {/* Progress bar */}
-                      <div style={{ marginBottom: 14 }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
-                          <span style={{ fontSize: 11, color: 'var(--text-muted)' }}>{ev.seatsBooked || 0} registered</span>
-                          <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--gold-dark)' }}>{pct}%</span>
-                        </div>
-                        <div className="prog-bar" style={{ height: 6, background: 'rgba(0,0,0,0.06)', borderRadius: 3, overflow: 'hidden' }}>
-                          <motion.div className="prog-fill"
-                            style={{ height: '100%', background: 'var(--gold-dark)', borderRadius: 3 }}
-                            initial={{ width: 0 }} animate={inView ? { width: `${pct}%` } : {}} transition={{ duration: 1, delay: 0.5 + i * 0.1 }} />
-                        </div>
-                        <p style={{ fontSize: 11, marginTop: 4, color: seatsLeft <= 5 ? '#e53e3e' : 'var(--text-muted)', fontWeight: seatsLeft <= 5 ? 600 : 400 }}>
-                          {seatsLeft <= 0 ? 'Seats Full' : `${seatsLeft} seats left`}
+                        <p style={{ fontSize: '12px', lineHeight: 1.5, color: '#5D6D7E', marginBottom: 16 }} className="line-clamp-2">
+                          {ev.description}
                         </p>
+
+                        {/* Location Details */}
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 16 }} className="font-arcade">
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '11px', color: '#1D2A44' }}>
+                            <RiTimeLine size={13} style={{ color: '#FF6F3C' }} />
+                            <span>{ev.time}</span>
+                          </div>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: '11px', color: '#1D2A44' }}>
+                            <RiMapPinLine size={13} style={{ color: '#F5B041' }} />
+                            <span className="line-clamp-1">{ev.place}</span>
+                          </div>
+                        </div>
+
+                        {/* Party Progress Bar */}
+                        <div>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6, fontSize: '9px', fontWeight: 'bold' }} className="font-pixel">
+                            <span style={{ color: '#1D2A44' }}>PARTY SIZE: {ev.seatsBooked || 0}</span>
+                            <span style={{ color: '#FF6F3C' }}>{pct}% FULL</span>
+                          </div>
+                          
+                          <div className="pixel-progress" style={{ height: 12 }}>
+                            <div className="pixel-progress-fill" style={{ width: `${pct}%`, background: '#FF6F3C' }} />
+                          </div>
+                          
+                          <p className="font-pixel" style={{ fontSize: '7px', marginTop: 6, marginBottom: 0, color: seatsLeft <= 5 ? '#E74C3C' : '#5D6D7E', fontWeight: 'bold' }}>
+                            {seatsLeft <= 0 ? 'PARTY OVERFLOW (FULL)' : `ONLY ${seatsLeft} SLOTS REMAINING`}
+                          </p>
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  <div style={{ padding: '0 20px 20px' }}>
-                    {isBooked ? (
-                      <button className="btn-outline" style={{ width: '100%', padding: '10px 0', borderRadius: 12, fontSize: 13, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, color: '#16a34a', border: '1px solid #16a34a', cursor: 'default' }} onClick={(e) => e.stopPropagation()}>
-                        <RiCheckboxCircleLine /> Seat Booked
-                      </button>
-                    ) : seatsLeft <= 0 ? (
-                      <button className="btn-outline" style={{ width: '100%', padding: '10px 0', borderRadius: 12, fontSize: 13, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, color: '#ef4444', border: '1px solid #ef4444', opacity: 0.6, cursor: 'not-allowed' }} onClick={(e) => e.stopPropagation()}>
-                        Seats Full
-                      </button>
-                    ) : (
-                      <button className="btn-primary"
-                        style={{ width: '100%', padding: '10px 0', borderRadius: 12, fontSize: 13, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleRegisterClick(ev);
-                        }}
-                        whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}>
-                        <RiTicketLine /> Book Ticket
-                      </button>
-                    )}
-                  </div>
-                </motion.div>
-              )
-            })
+                    {/* Book Buttons */}
+                    <div style={{ padding: '0 20px 20px' }}>
+                      {isBooked ? (
+                        <button className="arcade-btn" style={{ width: '100%', padding: '10px 0', borderRadius: 12, fontSize: '11px', color: '#2ECC71', border: '3px solid #2ECC71', background: 'rgba(46, 204, 113, 0.1)', cursor: 'default' }} onClick={(e) => e.stopPropagation()}>
+                          <RiCheckboxCircleLine size={14} /> QUEST JOINED ✓
+                        </button>
+                      ) : seatsLeft <= 0 ? (
+                        <button className="arcade-btn" style={{ width: '100%', padding: '10px 0', borderRadius: 12, fontSize: '11px', color: '#E74C3C', border: '3px solid #E74C3C', background: 'rgba(231, 76, 60, 0.1)', cursor: 'not-allowed', opacity: 0.6 }} onClick={(e) => e.stopPropagation()}>
+                          SLOTS EXHAUSTED
+                        </button>
+                      ) : (
+                        <button 
+                          className="arcade-btn btn-primary"
+                          style={{ width: '100%', padding: '10px 0', borderRadius: 12, fontSize: '11px' }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleRegisterClick(ev);
+                          }}
+                        >
+                          <RiTicketLine /> ENTER QUEST [B]
+                        </button>
+                      )}
+                    </div>
+                  </motion.div>
+                )
+              })
+            )}
+          </div>
+
+          {/* Boss Event Countdown Banner */}
+          {nearestEvent && (
+            <motion.div 
+              className="arcade-card-dark crt-screen"
+              style={{
+                borderRadius: '28px',
+                padding: '48px 32px',
+                textAlign: 'center',
+                border: '4px solid #1D2A44',
+                background: '#1D2A44',
+                boxShadow: '8px 8px 0px #FF6F3C'
+              }}
+            >
+              <p className="font-pixel" style={{ fontSize: '8px', color: '#FF6F3C', marginBottom: 12, letterSpacing: '1.5px' }}>🚨 INCOMING WORLD BOSS EVENT 🚨</p>
+              <h3 className="font-arcade" style={{ fontSize: '26px', color: '#FDF6E3', margin: '0 0 10px 0', fontWeight: 'bold' }}>{nearestEvent.title.toUpperCase()}</h3>
+              <p className="font-pixel" style={{ fontSize: '8px', color: '#CCD1D1', marginBottom: 28 }}>EVENT BEGINS IN</p>
+              
+              {/* Countdown Grid */}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, flexWrap: 'wrap', marginBottom: 36 }}>
+                <CBox value={cd.days} label="DAYS" />
+                <span className="font-pixel" style={{ fontSize: '18px', color: '#FF6F3C' }}>:</span>
+                <CBox value={cd.hours} label="HOURS" />
+                <span className="font-pixel" style={{ fontSize: '18px', color: '#FF6F3C' }}>:</span>
+                <CBox value={cd.minutes} label="MINS" />
+                <span className="font-pixel" style={{ fontSize: '18px', color: '#FF6F3C' }}>:</span>
+                <CBox value={cd.seconds} label="SECS" />
+              </div>
+
+              <button 
+                className="arcade-btn btn-secondary"
+                style={{ padding: '12px 36px', borderRadius: '12px', fontSize: '12px' }}
+                onClick={() => handleRegisterClick(nearestEvent)}
+              >
+                <RiTicketLine /> REGISTER NOW [A]
+              </button>
+            </motion.div>
           )}
         </div>
 
-        {/* Dynamic Countdown Banner */}
-        {nearestEvent && (
-          <motion.div initial={{ opacity: 0, y: 30 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ delay: 0.5, duration: 0.6 }}
-            style={{
-              borderRadius: 28, padding: '48px 32px', textAlign: 'center',
-              background: 'linear-gradient(135deg,var(--deep-green),var(--deep-green-light))', border: '1px solid rgba(201,168,76,0.25)'
-            }}>
-            <p style={{ fontSize: 11, letterSpacing: '0.12em', fontWeight: 600, color: 'var(--gold)', marginBottom: 8 }}>NEXT EVENT COUNTDOWN</p>
-            <h3 className="font-cormorant text-2xl font-bold" style={{ color: 'white', marginBottom: 6 }}>{nearestEvent.title}</h3>
-            <p style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', marginBottom: 32 }}>Event starts in</p>
-            
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16, flexWrap: 'wrap', marginBottom: 32 }}>
-              <CBox value={cd.days} label="Days" />
-              <span className="font-cormorant" style={{ fontWeight: 700, fontSize: 32, color: 'var(--gold)' }}>:</span>
-              <CBox value={cd.hours} label="Hours" />
-              <span className="font-cormorant" style={{ fontWeight: 700, fontSize: 32, color: 'var(--gold)' }}>:</span>
-              <CBox value={cd.minutes} label="Mins" />
-              <span className="font-cormorant" style={{ fontWeight: 700, fontSize: 32, color: 'var(--gold)' }}>:</span>
-              <CBox value={cd.seconds} label="Secs" />
+        {/* Quest detail Retro Scroll Modal */}
+        <AnimatePresence>
+          {selectedEvent && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm" onClick={() => setSelectedEvent(null)}>
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                onClick={(e) => e.stopPropagation()}
+                className="arcade-card crt-screen"
+                style={{
+                  background: '#FDF6E3',
+                  padding: '32px 24px',
+                  width: '100%',
+                  maxW: '540px',
+                  maxWidth: '540px',
+                  boxShadow: '12px 12px 0px #1D2A44',
+                  maxHeight: '85vh',
+                  overflowY: 'auto',
+                  color: '#1D2A44'
+                }}
+              >
+                {/* Close Button */}
+                <button 
+                  onClick={() => setSelectedEvent(null)} 
+                  className="absolute top-4 right-4 font-pixel" 
+                  style={{ background: 'none', border: 'none', color: '#1D2A44', fontSize: '16px', cursor: 'pointer' }}
+                >
+                  ✕
+                </button>
+                
+                <span className="font-pixel" style={{
+                  fontSize: '8px',
+                  padding: '4px 8px',
+                  borderRadius: '4px',
+                  background: '#EEDDC2',
+                  border: '2px solid #1D2A44',
+                  color: '#1D2A44'
+                }}>
+                  {selectedEvent.subject.toUpperCase()}
+                </span>
+                
+                <h2 className="font-arcade" style={{ fontSize: '24px', color: '#1D2A44', margin: '14px 0 10px 0', fontWeight: 'bold' }}>
+                  {selectedEvent.title}
+                </h2>
+                
+                <p style={{ fontSize: '13px', lineHeight: 1.6, color: '#5D6D7E', marginBottom: 20 }}>
+                  {selectedEvent.description}
+                </p>
+                
+                {/* Scroll Detail Info grid */}
+                <div style={{
+                  background: '#EEDDC2',
+                  border: '3px solid #1D2A44',
+                  borderRadius: '16px',
+                  padding: '18px',
+                  marginBottom: 20
+                }} className="space-y-4">
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+                    <RiMapPinLine size={16} style={{ color: '#FF6F3C', marginTop: 2 }} />
+                    <div>
+                      <p className="font-pixel" style={{ fontSize: '8px', color: '#1D2A44', margin: '0 0 2px 0' }}>LOCATION VENUE</p>
+                      <p className="font-arcade" style={{ fontSize: '12px', fontWeight: 'bold', margin: 0 }}>{selectedEvent.place}</p>
+                    </div>
+                  </div>
+                  
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+                      <RiTimeLine size={16} style={{ color: '#FF6F3C', marginTop: 2 }} />
+                      <div>
+                        <p className="font-pixel" style={{ fontSize: '7px', color: '#1D2A44', margin: '0 0 2px 0' }}>DATE & TIME</p>
+                        <p className="font-arcade" style={{ fontSize: '11px', fontWeight: 'bold', margin: 0 }}>
+                          {new Date(selectedEvent.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })} @ {selectedEvent.time}
+                        </p>
+                      </div>
+                    </div>
+                    
+                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+                      <RiTicketLine size={16} style={{ color: '#FF6F3C', marginTop: 2 }} />
+                      <div>
+                        <p className="font-pixel" style={{ fontSize: '7px', color: '#1D2A44', margin: '0 0 2px 0' }}>ORGANISER</p>
+                        <p className="font-arcade" style={{ fontSize: '11px', fontWeight: 'bold', margin: 0 }}>{selectedEvent.organiser}</p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, paddingTop: 12, borderTop: '2px dashed rgba(29, 42, 68, 0.15)' }}>
+                    <div>
+                      <p className="font-pixel" style={{ fontSize: '7px', color: '#5D6D7E', margin: '0 0 2px 0' }}>QUEST PRICE</p>
+                      <p className="font-pixel" style={{ fontSize: '11px', fontWeight: 'bold', color: '#FF6F3C', margin: 0 }}>
+                        {selectedEvent.price === 0 ? 'FREE LOOT' : `₹${selectedEvent.price}`}
+                      </p>
+                    </div>
+                    <div>
+                      <p className="font-pixel" style={{ fontSize: '7px', color: '#5D6D7E', margin: '0 0 2px 0' }}>PARTY SLOTS</p>
+                      <p className="font-arcade" style={{ fontSize: '12px', fontWeight: 'bold', margin: 0 }}>
+                        {selectedEvent.seat - (selectedEvent.seatsBooked || 0)} / {selectedEvent.seat} LEFT
+                      </p>
+                    </div>
+                  </div>
+
+                  {selectedEvent.dressCode && (
+                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, paddingTop: 12, borderTop: '2px dashed rgba(29, 42, 68, 0.15)' }}>
+                      <RiShirtLine size={16} style={{ color: '#FF6F3C', marginTop: 2 }} />
+                      <div>
+                        <p className="font-pixel" style={{ fontSize: '7px', color: '#1D2A44', margin: '0 0 2px 0' }}>DRESS CODE REQUIREMENT</p>
+                        <p style={{ fontSize: '12px', fontWeight: 'bold', margin: 0 }}>{selectedEvent.dressCode}</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Important Notes */}
+                {selectedEvent.notes && (
+                  <div style={{
+                    background: 'rgba(245, 176, 65, 0.15)',
+                    border: '2px solid #F5B041',
+                    borderRadius: '12px',
+                    padding: '12px 14px',
+                    marginBottom: 20,
+                    display: 'flex',
+                    gap: 8
+                  }}>
+                    <RiAlertLine size={18} style={{ color: '#FF6F3C', flexShrink: 0, marginTop: 1 }} />
+                    <div>
+                      <p className="font-pixel" style={{ fontSize: '7px', color: '#FF6F3C', margin: '0 0 2px 0' }}>CRITICAL QUEST INSTRUCTIONS</p>
+                      <p style={{ fontSize: '11px', color: '#1D2A44', margin: 0, lineHeight: 1.4 }}>{selectedEvent.notes}</p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Brochure Attachment */}
+                {selectedEvent.documentUrl && (
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    background: 'rgba(29, 42, 68, 0.05)',
+                    border: '2px dashed #1D2A44',
+                    padding: '12px 16px',
+                    borderRadius: '12px',
+                    marginBottom: 20
+                  }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <RiFileListLine size={18} style={{ color: '#FF6F3C' }} />
+                      <span className="font-arcade" style={{ fontSize: '11px', fontWeight: 'bold', color: '#1D2A44' }}>QUEST SCROLL / BROCHURE</span>
+                    </div>
+                    <a 
+                      href={`http://localhost:7070${selectedEvent.documentUrl}`} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="arcade-btn btn-secondary"
+                      style={{ padding: '6px 12px', fontSize: '10px', textDecoration: 'none', borderRadius: '8px' }}
+                    >
+                      <RiDownloadLine /> GET LOOT
+                    </a>
+                  </div>
+                )}
+
+                {/* RSVP / Booking Action Button */}
+                <div style={{ paddingTop: 8 }}>
+                  {!session ? (
+                    <button 
+                      onClick={() => {
+                        setSelectedEvent(null);
+                        navigate('/login');
+                      }}
+                      className="arcade-btn btn-primary"
+                      style={{ width: '100%', padding: '12px 0', borderRadius: '12px', fontSize: '12px' }}
+                    >
+                      <RiLockLine /> INSERT COIN [LOG IN] TO REGISTER
+                    </button>
+                  ) : isUserBooked(selectedEvent._id) ? (
+                    <div className="font-arcade" style={{
+                      width: '100%',
+                      background: 'rgba(46, 204, 113, 0.15)',
+                      border: '3px solid #2ECC71',
+                      color: '#2ECC71',
+                      padding: '12px 0',
+                      borderRadius: '12px',
+                      fontWeight: 'bold',
+                      textAlign: 'center',
+                      fontSize: '13px'
+                    }}>
+                      ✓ YOU ARE REGISTERED IN THIS PARTY PARTY_SLOT
+                    </div>
+                  ) : selectedEvent.seat - (selectedEvent.seatsBooked || 0) <= 0 ? (
+                    <div className="font-pixel" style={{
+                      width: '100%',
+                      background: 'rgba(231, 76, 60, 0.15)',
+                      border: '3px solid #E74C3C',
+                      color: '#E74C3C',
+                      padding: '12px 0',
+                      borderRadius: '12px',
+                      textAlign: 'center',
+                      fontSize: '9px'
+                    }}>
+                      PARTY IS FULL (EXHAUSTED)
+                    </div>
+                  ) : (
+                    <button 
+                      onClick={() => {
+                        if (selectedEvent.price === 0) {
+                          handleFreeBooking(selectedEvent._id);
+                        } else {
+                          handlePaidBooking(selectedEvent);
+                        }
+                      }}
+                      disabled={bookingInProgress}
+                      className="arcade-btn btn-primary animate-pulse"
+                      style={{ width: '100%', padding: '14px 0', borderRadius: '12px', fontSize: '12px' }}
+                    >
+                      <RiTicketLine /> {bookingInProgress ? 'TRANSMITTING QUEST TICKET...' : selectedEvent.price === 0 ? 'RESERVE FREE SLOT [A]' : `PAY & JOIN RAID (₹${selectedEvent.price}) [A]`}
+                    </button>
+                  )}
+                </div>
+              </motion.div>
             </div>
-
-            <motion.button className="btn-primary"
-              style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '12px 32px', borderRadius: 12, fontSize: 14 }}
-              onClick={() => handleRegisterClick(nearestEvent)}
-              whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.97 }}>
-              <RiTicketLine /> Register Now
-            </motion.button>
-          </motion.div>
-        )}
-      </div>
-
-      {/* Dynamic Detail & Booking Modal */}
-      <AnimatePresence>
-        {selectedEvent && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm" onClick={() => setSelectedEvent(null)}>
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              onClick={(e) => e.stopPropagation()}
-              className="bg-gray-900 border border-white/20 p-8 rounded-2xl w-full max-w-xl shadow-2xl relative max-h-[85vh] overflow-y-auto text-white"
-            >
-              <button onClick={() => setSelectedEvent(null)} className="absolute top-4 right-4 text-gray-400 hover:text-white text-xl">✕</button>
-              
-              <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-gold/10 text-gold border border-gold/20">
-                {selectedEvent.subject}
-              </span>
-              
-              <h2 className="text-3xl font-bold text-gold mt-2 mb-4 font-cormorant">{selectedEvent.title}</h2>
-              <p className="text-sm text-gray-400 leading-relaxed mb-6">{selectedEvent.description}</p>
-              
-              <div className="bg-white/5 border border-white/10 p-5 rounded-xl space-y-3 mb-6 text-sm">
-                <div className="flex items-center gap-3">
-                  <RiMapPinLine size={16} className="text-gold" />
-                  <div>
-                    <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">Venue</p>
-                    <p className="font-semibold">{selectedEvent.place}</p>
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="flex items-center gap-3">
-                    <RiTimeLine size={16} className="text-gold" />
-                    <div>
-                      <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">Date & Time</p>
-                      <p className="font-semibold">{new Date(selectedEvent.date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })} @ {selectedEvent.time}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <RiTicketLine size={16} className="text-gold" />
-                    <div>
-                      <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">Organiser</p>
-                      <p className="font-semibold">{selectedEvent.organiser}</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-4 pt-2 border-t border-white/5">
-                  <div>
-                    <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">Price</p>
-                    <p className="font-semibold text-lg text-gold">{selectedEvent.price === 0 ? 'FREE' : `₹${selectedEvent.price}`}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">Available Seats</p>
-                    <p className="font-semibold text-lg">{selectedEvent.seat - (selectedEvent.seatsBooked || 0)} / {selectedEvent.seat}</p>
-                  </div>
-                </div>
-                {selectedEvent.dressCode && (
-                  <div className="flex items-center gap-3 pt-2 border-t border-white/5">
-                    <RiShirtLine size={16} className="text-gold" />
-                    <div>
-                      <p className="text-xs text-gray-400 font-bold uppercase tracking-wider">Dress Code</p>
-                      <p className="font-semibold">{selectedEvent.dressCode}</p>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {selectedEvent.notes && (
-                <div className="bg-gold/5 border border-gold/15 p-4 rounded-xl mb-6 flex gap-2">
-                  <RiAlertLine size={18} className="text-gold flex-shrink-0 mt-0.5" />
-                  <div>
-                    <p className="text-xs font-bold text-gold uppercase tracking-wider mb-0.5">Important Notes</p>
-                    <p className="text-xs text-gray-300 leading-relaxed">{selectedEvent.notes}</p>
-                  </div>
-                </div>
-              )}
-
-              {selectedEvent.documentUrl && (
-                <div className="mb-6 flex justify-between items-center bg-white/5 border border-white/5 p-3.5 rounded-xl">
-                  <div className="flex items-center gap-2.5">
-                    <RiFileListLine size={18} className="text-gold" />
-                    <span className="text-xs text-gray-300 font-medium">Event Brochure / Attachment</span>
-                  </div>
-                  <a 
-                    href={`http://localhost:7070${selectedEvent.documentUrl}`} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-1.5 bg-white/10 hover:bg-gold hover:text-black px-3.5 py-1.5 rounded-lg text-xs font-semibold transition"
-                  >
-                    <RiDownloadLine /> Download
-                  </a>
-                </div>
-              )}
-
-              {/* Booking Actions */}
-              <div className="pt-2">
-                {!session ? (
-                  <button 
-                    onClick={() => {
-                      setSelectedEvent(null);
-                      navigate('/login');
-                    }}
-                    className="w-full bg-gold text-black py-3 rounded-xl font-bold hover:bg-yellow-600 transition flex items-center justify-center gap-2"
-                  >
-                    <RiLockLine /> Log in to Book Seat
-                  </button>
-                ) : isUserBooked(selectedEvent._id) ? (
-                  <div className="w-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 py-3 rounded-xl font-bold text-center flex items-center justify-center gap-2">
-                    <RiCheckboxCircleLine size={18} /> You are registered for this event!
-                  </div>
-                ) : selectedEvent.seat - (selectedEvent.seatsBooked || 0) <= 0 ? (
-                  <div className="w-full bg-red-500/10 border border-red-500/20 text-red-400 py-3 rounded-xl font-bold text-center">
-                    Seats Full
-                  </div>
-                ) : (
-                  <button 
-                    onClick={() => {
-                      if (selectedEvent.price === 0) {
-                        handleFreeBooking(selectedEvent._id);
-                      } else {
-                        handlePaidBooking(selectedEvent);
-                      }
-                    }}
-                    disabled={bookingInProgress}
-                    className="w-full bg-gradient-to-r from-gold to-yellow-600 text-black py-3.5 rounded-xl font-bold hover:opacity-90 transition disabled:opacity-50 flex items-center justify-center gap-2"
-                  >
-                    <RiTicketLine /> {bookingInProgress ? 'Processing Booking...' : selectedEvent.price === 0 ? 'Reserve Free Seat' : `Pay & Confirm Seat (₹${selectedEvent.price})`}
-                  </button>
-                )}
-              </div>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
-    </section>
+          )}
+        </AnimatePresence>
+      </section>
+    </>
   )
 }
 
